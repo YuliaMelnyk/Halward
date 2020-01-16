@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">H</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="swipe_left_for_register">Swipe Left for Register</string>
+    <string name="login">SIGN IN</string>
+    <string name="register">SIGN UP</string>
+    <string name="password">Password</string>
+    <string name="e_mail">Email</string>
+    <string name="tag">Halward</string>
+    <string name="label_one">Forgot password?</string>
+    <string name="label_two">Sign in with</string>
+    <string name="swipe_right_for_login">Not a member yet? Sign up!</string>
+    <string name="logo">H</string>
+    <string name="re_type_password">Repeat Password</string>
+    <string name="your_name">User name</string>
+    <string name="sign_up_with">Sign up with</string>
+</resources>
