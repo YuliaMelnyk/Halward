@@ -3,7 +3,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="swipe_left_for_register">Swipe Left for Register</string>
+    <string name="member_label">Not a member yet? </string>
+    <string name="signup_label"> <u>Sign up!</u> </string>
     <string name="login">SIGN IN</string>
     <string name="register">SIGN UP</string>
     <string name="password">Password</string>
@@ -11,9 +12,17 @@
     <string name="tag">Halward</string>
     <string name="label_one">Forgot password?</string>
     <string name="label_two">Sign in with</string>
-    <string name="swipe_right_for_login">Not a member yet? Sign up!</string>
     <string name="logo">H</string>
     <string name="re_type_password">Repeat Password</string>
     <string name="your_name">User name</string>
     <string name="sign_up_with">Sign up with</string>
+    <string name="plus_sign_out">Change Google+ account</string>
+    <string name="plus_disconnect">Disconnect from Google+</string>
+    <string name="error_invalid_email">Invalid Email</string>
+    <string name="error_invalid_password">The password is too short</string>
+    <string name="error_incorrect_password">Email or password incorrect</string>
+    <string name="error_repeat_password">Your password and confirmation password do not match </string>
+    <string name="error_field_required">Required</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="create_account">Register</string>
 </resources>

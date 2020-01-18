@@ -1,101 +1,155 @@
 package com.example.halward.login;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.Loader;
-
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.halward.HomeActivity;
 import com.example.halward.R;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.example.halward.ValidateUser;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 
-public class LoginActivity extends AppCompatActivity implements
-        GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener,
-        View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+    private ImageView mFacebook, mGoogle;
+    private EditText mEmail, mPassword;
+    private Button mLoginBtn;
+    private TextView mSignUp, mResetPassword;
 
-    private static final String TAG = "LoginActivity";
-    private static final int REQUEST_SIGNUP = 0;
+    View focusView = null;
+    private ValidateUser mValidateUser;
 
-    //Id to identity READ_CONTACTS permission request.
+    FirebaseAuth mFirebaseAuth;
 
-    private static final int REQUEST_READ_CONTACTS = 0;
+    // Sing In with Goodle+
 
-    //Request code used to invoke sign in user interactions.
-    private static final int RC_SIGN_IN = 0;
+    //    Request code used to invoke sign in user interactions for Google+
+    public static final int RC_GOOGLE_LOGIN = 1;
 
-    private GoogleSignInClient mGoogleSignInClient;
+    //Client used to interact with Google APIs.
+    private GoogleApiClient mGoogleApiClient;
+
+    //    A flag indicating that a PendingIntent is in progress and prevents us from starting further intents.
+    private boolean mGoogleIntentInProgress;
+
+    //Track whether the sign-in button has been clicked so that we know to resolve all issues preventing sign-in without waiting.
+    private boolean mGoogleLoginClicked;
+
+
+    //    The login button for Google
+    private ImageView mGoogleLogin;
+//
+//    static String personName, gmail;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Configure sign-in to request the user's ID, email address, and basic
-// profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
+        mFacebook = (ImageView) findViewById(R.id.login_face);
+        mGoogle = (ImageView) findViewById(R.id.login_google);
+        mEmail = (EditText) findViewById(R.id.log_email);
+        mPassword = (EditText) findViewById(R.id.log_password);
+        mLoginBtn = (Button) findViewById(R.id.btn_login);
+        mSignUp = (TextView) findViewById(R.id.signup_label);
 
-        // Build a GoogleSignInClient with the options specified by gso.
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mFirebaseAuth = FirebaseAuth.getInstance();
 
-        // Check for existing Google Sign In account, if the user is already signed in
-// the GoogleSignInAccount will be non-null.
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        //updateUI(account);
+        mLoginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String email = mEmail.getText().toString().trim();
+                String password = mPassword.getText().toString().trim();
+
+                mValidateUser = new ValidateUser();
+                // Check for a valid email address.
+                if (TextUtils.isEmpty(email)) {
+                    mEmail.setError(getString(R.string.error_field_required));
+                    mEmail.requestFocus();
+                    return;
+                } else if (!mValidateUser.isEmailValid(email)) {
+                    mEmail.setError(getString(R.string.error_invalid_email));
+                    mEmail.requestFocus();
+                    return;
+                } else if (TextUtils.isEmpty(password)) {
+                    mPassword.setError(getString(R.string.error_field_required));
+                    mPassword.requestFocus();
+                    return;
+                } else if (!mValidateUser.isPasswordValid(password)) {
+                    mPassword.setError(getString(R.string.error_invalid_password));
+                    mPassword.requestFocus();
+                    return;
+                }
+
+                // authenticate the user
+
+                mFirebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "Logged is successfully", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
+
+        mSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
+            }
+        });
+
+        mResetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                resetPassword(mEmail.getText().toString().trim());
+            }
+        });
     }
 
-    private void signIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
+    private void resetPassword(String emailAddress) {
+        mFirebaseAuth.sendPasswordResetEmail(emailAddress)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "Email sent.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     @Override
-    public void onClick(View view) {
-
-    }
-
-    @NonNull
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
-
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mFirebaseAuth.getCurrentUser();
 
     }
 
@@ -103,7 +157,4 @@ public class LoginActivity extends AppCompatActivity implements
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
-
-
-
 }
