@@ -1,9 +1,12 @@
 package com.example.halward.login;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,45 +20,80 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.halward.HomeActivity;
 import com.example.halward.R;
 import com.example.halward.ValidateUser;
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.Login;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
+import org.json.JSONObject;
+
+import java.util.Arrays;
+
+
+//TODO implements with View.onClick... and make methods with switch case.
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
     private ImageView mFacebook, mGoogle;
     private EditText mEmail, mPassword;
     private Button mLoginBtn;
-    private TextView mSignUp, mResetPassword;
+    private TextView mSignUp, mForgotPassword;
+
+    private View mProgressView;
+    private View mLoginFormView;
 
     View focusView = null;
     private ValidateUser mValidateUser;
 
+    ProgressDialog ringProgressDialog;
+
     FirebaseAuth mFirebaseAuth;
 
-    // Sing In with Goodle+
+    /* The login button for Google */
 
+    // Sing In with Goodle+
+    private static final String TAG = "HomeActivity";
     //    Request code used to invoke sign in user interactions for Google+
     public static final int RC_GOOGLE_LOGIN = 1;
 
     //Client used to interact with Google APIs.
     private GoogleApiClient mGoogleApiClient;
 
-    //    A flag indicating that a PendingIntent is in progress and prevents us from starting further intents.
-    private boolean mGoogleIntentInProgress;
-
-    //Track whether the sign-in button has been clicked so that we know to resolve all issues preventing sign-in without waiting.
-    private boolean mGoogleLoginClicked;
-
-
     //    The login button for Google
     private ImageView mGoogleLogin;
-//
-//    static String personName, gmail;
+
+    /* The login button for Facebook */
+
+    private static final String EMAIL = "email";
+
+    private ImageView mFacebookLogin;
+    /* The callback manager for Facebook */
+    private CallbackManager mFacebookCallbackManager;
+    /* Used to track user logging in/out off Facebook */
+    private AccessTokenTracker mFacebookAccessTokenTracker;
+
+    private LoginButton facebookButton;
+
+    private String personName, gmail;
+    private String idToken;
 
 
     @Override
@@ -64,6 +102,56 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         setContentView(R.layout.activity_login);
 
         mFacebook = (ImageView) findViewById(R.id.login_face);
+        facebookButton = (LoginButton) findViewById(R.id.btn_fb_login) ;
+        mFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (view.getId() == R.id.login_face){
+                    facebookButton.performClick();
+                }
+            }
+        });
+
+
+        facebookButton.setReadPermissions(Arrays.asList(EMAIL));
+
+        mFacebookCallbackManager = CallbackManager.Factory.create();
+
+        // Callback registration
+        facebookButton.registerCallback(mFacebookCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // App code
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(
+                                    JSONObject object,
+                                    GraphResponse response) {
+                                // Application code
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender, birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
+            }
+
+            @Override
+            public void onCancel() {
+                Toast.makeText(LoginActivity.this, "User cancelled", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                Toast.makeText(LoginActivity.this, "Error on Login, check your facebook app_id", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+
         mGoogle = (ImageView) findViewById(R.id.login_google);
         mEmail = (EditText) findViewById(R.id.log_email);
         mPassword = (EditText) findViewById(R.id.log_password);
@@ -71,6 +159,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         mSignUp = (TextView) findViewById(R.id.signup_label);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
+
+
+        if (mFirebaseAuth.getCurrentUser() != null) {
+            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            finish();
+        }
+
 
         mLoginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,10 +200,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Toast.makeText(LoginActivity.this, "Logged is successfully", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
+                            gotoProfile();
                         } else {
                             Toast.makeText(LoginActivity.this, "Error! " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
@@ -124,13 +216,86 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
 
-        mResetPassword.setOnClickListener(new View.OnClickListener() {
+/*        mResetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 resetPassword(mEmail.getText().toString().trim());
             }
+        });*/
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+        mGoogleLogin = (ImageView) findViewById(R.id.login_google);
+        mGoogleLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+                startActivityForResult(intent, RC_GOOGLE_LOGIN);
+            }
         });
+
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_GOOGLE_LOGIN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+        }
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        if (result.isSuccess()) {
+            GoogleSignInAccount account = result.getSignInAccount();
+            idToken = account.getIdToken();
+            personName = account.getDisplayName();
+            gmail = account.getEmail();
+            // you can store user data to SharedPreference
+            AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+            firebaseAuthWithGoogle(credential);
+        } else {
+            // Google Sign In failed, update UI appropriately
+            Log.e(TAG, "Login Unsuccessful. " + result);
+            Toast.makeText(this, "Login Unsuccessful", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void firebaseAuthWithGoogle(AuthCredential credential) {
+
+        mFirebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
+                            gotoProfile();
+                        } else {
+                            Log.w(TAG, "signInWithCredential" + task.getException().getMessage());
+                            task.getException().printStackTrace();
+                            Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+    }
+
+    private void gotoProfile() {
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
 
     private void resetPassword(String emailAddress) {
         mFirebaseAuth.sendPasswordResetEmail(emailAddress)
@@ -148,7 +313,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
+        // Check if user is signed in (non-null).
         FirebaseUser currentUser = mFirebaseAuth.getCurrentUser();
 
     }
@@ -157,4 +322,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
+
+
 }

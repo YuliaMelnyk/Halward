@@ -22,7 +22,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class RegisterActivity extends AppCompatActivity {
-    private ImageView mFacebook, mGoogle;
     private EditText mEmail, mName, mPassword, mRePassword;
     private Button mRegisterBtn;
     FirebaseAuth mFirebaseAuth;
@@ -35,8 +34,6 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        mFacebook = (ImageView) findViewById(R.id.facebook);
-        mGoogle = (ImageView) findViewById(R.id.google);
         mEmail = (EditText) findViewById(R.id.reg_email);
         mName = (EditText) findViewById(R.id.reg_name);
         mPassword = (EditText) findViewById(R.id.reg_password);
