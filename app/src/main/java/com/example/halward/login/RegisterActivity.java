@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.halward.HomeActivity;
@@ -19,7 +18,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText mEmail, mName, mPassword, mRePassword;
@@ -69,7 +67,7 @@ public class RegisterActivity extends AppCompatActivity {
                     mPassword.setError(getString(R.string.error_field_required));
                     mPassword.requestFocus();
                     return;
-                } else if (password.length() < 6) {
+                } else if (!mValidateUser.isPasswordValid(password)) {
                     mPassword.setError(getString(R.string.error_invalid_password));
                     mPassword.requestFocus();
                     return;
