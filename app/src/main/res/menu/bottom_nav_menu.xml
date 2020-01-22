@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/nav_home"
+        android:enabled="true"
+        android:icon="@drawable/icon_home_gris"
+        app:showAsAction="ifRoom"
+        android:title="Home"/>
+
+    <item
+        android:id="@+id/nav_calendar"
+        android:enabled="true"
+        android:icon="@drawable/icon_calendar_gris"
+        app:showAsAction="ifRoom"
+        android:title="Calendar" />
+
+    <item
+        android:id="@+id/nav_create"
+        android:enabled="true"
+        android:icon="@drawable/icon_add_gris"
+        app:showAsAction="ifRoom"
+        android:title="Create"/>
+
+
+    <item
+        android:id="@+id/nav_progress"
+        android:enabled="true"
+        android:icon="@drawable/icons_statistics_gris"
+        app:showAsAction="ifRoom"
+        android:title="Progress"/>
+
+    <item
+        android:id="@+id/nav_profile"
+        android:enabled="true"
+        android:icon="@drawable/icon_user_gris"
+        app:showAsAction="ifRoom"
+        android:title="Profile"/>
+</menu>

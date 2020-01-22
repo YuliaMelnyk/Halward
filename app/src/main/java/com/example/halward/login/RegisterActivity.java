@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.halward.HomeActivity;
+import com.example.halward.homePage.HomeActivity;
 import com.example.halward.R;
 import com.example.halward.ValidateUser;
 import com.google.android.gms.tasks.OnCompleteListener;
