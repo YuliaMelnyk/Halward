@@ -3,15 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/Widget.MaterialComponents.CardView"
-    app:cardBackgroundColor="@android:color/transparent"
+    app:cardBackgroundColor="@color/colorAccent"
     android:id="@+id/card_habits"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="@dimen/card_radius"
     app:cardElevation="@dimen/card_elevation"
-    android:layout_marginStart="@dimen/card_margin"
-    android:layout_marginTop="@dimen/card_margin"
-    android:layout_marginEnd="@dimen/card_margin">
+    android:layout_marginStart="@dimen/card_elevation"
+    android:layout_marginTop="@dimen/card_elevation"
+    android:layout_marginEnd="@dimen/card_elevation">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -48,8 +48,8 @@
 
         <ImageView
             android:id="@+id/habit_image"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"

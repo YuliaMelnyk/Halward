@@ -5,21 +5,21 @@
     <item
         android:id="@+id/nav_home"
         android:enabled="true"
-        android:icon="@drawable/icon_home_gris"
+        android:icon="@drawable/nav_home"
         app:showAsAction="ifRoom"
         android:title="Home"/>
 
     <item
         android:id="@+id/nav_calendar"
         android:enabled="true"
-        android:icon="@drawable/icon_calendar_gris"
+        android:icon="@drawable/nav_calen"
         app:showAsAction="ifRoom"
         android:title="Calendar" />
 
     <item
         android:id="@+id/nav_create"
         android:enabled="true"
-        android:icon="@drawable/icon_add_gris"
+        android:icon="@drawable/nav_add"
         app:showAsAction="ifRoom"
         android:title="Create"/>
 
@@ -27,14 +27,14 @@
     <item
         android:id="@+id/nav_progress"
         android:enabled="true"
-        android:icon="@drawable/icons_statistics_gris"
+        android:icon="@drawable/nav_stat"
         app:showAsAction="ifRoom"
         android:title="Progress"/>
 
     <item
         android:id="@+id/nav_profile"
         android:enabled="true"
-        android:icon="@drawable/icon_user_gris"
+        android:icon="@drawable/nav_user"
         app:showAsAction="ifRoom"
         android:title="Profile"/>
 </menu>

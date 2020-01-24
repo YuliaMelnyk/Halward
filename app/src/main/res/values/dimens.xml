@@ -1,7 +1,7 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="card_margin">8dp</dimen>
-    <dimen name="card_radius">8dp</dimen>
+    <dimen name="card_margin">16dp</dimen>
+    <dimen name="card_radius">15dp</dimen>
     <dimen name="card_elevation">10dp</dimen>
     <dimen name="linear_padding">8dp</dimen>
     <dimen name="textview_margin">16dp</dimen>
