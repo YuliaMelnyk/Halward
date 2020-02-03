@@ -6,12 +6,13 @@ public class Habit implements Serializable, Comparable<Habit> {
     private String name;
     private String description;
     private int duration;
-    private int image;
+    private String image;
+    private String key;
 
     public Habit(){
 
     }
-    public Habit(String name, int duration, int image){
+    public Habit(String name, int duration, String image){
         this.name = name;
         this.duration = duration;
         this.image = image;
@@ -46,11 +47,19 @@ public class Habit implements Serializable, Comparable<Habit> {
         this.duration = duration;
     }
 
-    public int getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(int image) {
+    public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

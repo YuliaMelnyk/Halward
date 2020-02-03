@@ -31,6 +31,15 @@
 
     <string name="habit_name"> Drink 8 glasses of water</string>
     <string name="habit_days">21 days</string>
+    <string name="hint_task_title">Title</string>
 
     <string name="quote">"It’s going to be hard, but hard does not mean impossible."</string>
+    <string name="title_label">Title</string>
+    <string name="description_label">Description</string>
+    <string name="remind_label">Remind</string>
+    <string name="duration_label">Duration</string>
+    <string name="create_habbit">Create a habit</string>
+    <string name="days">days</string>
+    <string name="on_days">On days</string>
+    <string name="add_photo">Choose photo</string>
 </resources>

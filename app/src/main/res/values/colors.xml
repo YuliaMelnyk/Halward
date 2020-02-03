@@ -11,4 +11,5 @@
     <color name="nav_primary">#95A5A6</color>
     <color name="nav_primary_second">#CCCCCC</color>
     <color name="nav_clicked">#FFECE8</color>
+    <color name="black">#000</color>
 </resources>

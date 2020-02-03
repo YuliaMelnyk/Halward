@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+        <androidx.appcompat.widget.Toolbar
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/add_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/colorTransparent"
+            android:theme="@style/FormBarTheme">
+
+            <ImageButton
+                android:id="@+id/back_home"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:background="@drawable/back"/>
+
+
+        </androidx.appcompat.widget.Toolbar>
+
+

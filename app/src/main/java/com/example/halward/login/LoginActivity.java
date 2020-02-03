@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.halward.homePage.HomeActivity;
 import com.example.halward.R;
 import com.example.halward.ValidateUser;
+import com.example.halward.model.User;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -42,31 +43,33 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.json.JSONObject;
 
 import java.util.Arrays;
 
 
-
-
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+
+    private static final int RC_SIGN_IN = 9001;
     private ImageView mFacebook, mGoogle;
     private EditText mEmail, mPassword;
     private Button mLoginBtn;
     private TextView mSignUp, mForgotPassword;
 
-    private View mProgressView;
-    private View mLoginFormView;
 
-    View focusView = null;
     private ValidateUser mValidateUser;
-
-    LoginManager mLoginManager;
 
     ProgressDialog ringProgressDialog;
 
     FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
+
+
+    //Firebase Firestore
+    private FirebaseFirestore db;
 
     /* The login button for Google */
 
@@ -93,7 +96,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private LoginButton facebookButton;
 
-    private String personName, gmail;
+    public String personName, gmail;
     private String idToken;
 
 
@@ -101,6 +104,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+         //db = FirebaseFirestore.getInstance();
 
         mFacebook = (ImageView) findViewById(R.id.login_face);
         facebookButton = (LoginButton) findViewById(R.id.btn_fb_login);
@@ -206,6 +211,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            String userId = mFirebaseAuth.getCurrentUser().getUid();
+                            CollectionReference users = db.collection("users");
+
                             Toast.makeText(LoginActivity.this, "Logged is successfully", Toast.LENGTH_SHORT).show();
                             gotoProfile();
                         } else {
@@ -260,6 +268,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 // Google Sign In was successful, authenticate with Firebase
                 //GoogleSignInAccount account = result.getSignInAccount();
                 //firebaseAuthWithGoogle(account);
+
                 handleSignInResult(result);
             } else {
                 Toast.makeText(LoginActivity.this, "Authentication failed.",
@@ -273,12 +282,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
 
+
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
             GoogleSignInAccount account = result.getSignInAccount();
             idToken = account.getIdToken();
             personName = account.getDisplayName();
             gmail = account.getEmail();
+
             // you can store user data to SharedPreference
             AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
             firebaseAuthWithGoogle(credential);
@@ -338,6 +349,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         FirebaseUser currentUser = mFirebaseAuth.getCurrentUser();
 
     }
+
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {

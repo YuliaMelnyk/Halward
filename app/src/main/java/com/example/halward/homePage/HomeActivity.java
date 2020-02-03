@@ -6,31 +6,23 @@ import android.os.Bundle;
 
 import com.example.halward.R;
 import com.example.halward.SinglFragmentActivity;
+import com.google.firebase.auth.FirebaseAuth;
+
 
 public class HomeActivity extends SinglFragmentActivity {
 
+    FirebaseAuth mFirebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        }
 
+        mFirebaseAuth = FirebaseAuth.getInstance();
+    }
 
     @Override
     protected Fragment createFragment() {
         return new HomeFragment().newInstance();
     }
-
-/*    public void logOut(View view) {
-        FirebaseAuth.getInstance().signOut(); // logout
-        Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
-    }*/
-
-
-
 }
