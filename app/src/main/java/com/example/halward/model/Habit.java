@@ -1,21 +1,25 @@
 package com.example.halward.model;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 public class Habit implements Serializable, Comparable<Habit> {
     private String name;
     private String description;
     private int duration;
     private String image;
-    private String key;
+    private UUID key;
 
     public Habit(){
-
+key =UUID.randomUUID();
     }
     public Habit(String name, int duration, String image){
         this.name = name;
         this.duration = duration;
         this.image = image;
+    }
+    public Habit(String name){
+        this.name = name;
     }
 
     @Override
@@ -53,13 +57,5 @@ public class Habit implements Serializable, Comparable<Habit> {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
     }
 }

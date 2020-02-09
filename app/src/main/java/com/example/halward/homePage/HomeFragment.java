@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,15 +29,24 @@ import com.example.halward.calendarPage.CalendarActivity;
 import com.example.halward.login.LoginActivity;
 import com.example.halward.model.Habit;
 import com.example.halward.model.User;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -44,6 +54,7 @@ import com.google.firebase.storage.StorageReference;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -52,18 +63,18 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private List<Habit> mHabits;
     private RecyclerView mRecyclerView;
     private HomeAdapter mHomeAdapter;
     private View view;
     private TextView mHelloText;
-    private LoginActivity mLoginActivity;
-    private FirebaseFirestore mFirestore;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+
     private FirebaseUser user;
     private FirebaseAuth mFirebaseAuth;
-    private StorageReference mStorageRef;
     public static String userName;
 
 
@@ -82,14 +93,11 @@ public class HomeFragment extends Fragment {
 
 
         mFirebaseAuth = FirebaseAuth.getInstance();
-        mFirestore = FirebaseFirestore.getInstance();
-        mStorageRef = FirebaseStorage.getInstance().getReference();
         user = mFirebaseAuth.getCurrentUser();
         userName = user.getDisplayName();
 
         BottomNavigationView navView = view.findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
 
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
@@ -105,23 +113,39 @@ public class HomeFragment extends Fragment {
             e.printStackTrace();
         }
         mHelloText = (TextView) view.findViewById(R.id.hello);
-        mHelloText.setText("Hello " + userName+"!");
+        mHelloText.setText("Hello " + userName + "!");
 
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference collectionReference = db.collection("habits");
 
-        fillHabits();
+        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    mHabits = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        //final Habit habit = new Habit();
+                        /*habit.setName(document.get("name").toString());
+                        habit.setDescription(document.get("description").toString());
+                        String habit_id = document.getId();*/
+                        Habit habit = document.toObject(Habit.class);
+                        mHabits.add(habit);
+                    }
 
+                mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+                // mRecyclerView.setHasFixedSize(true);
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-        // mRecyclerView.setHasFixedSize(true);
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                mHomeAdapter = new HomeAdapter(getContext(), mHabits);
+                mRecyclerView.setAdapter(mHomeAdapter);
+                mHomeAdapter.notifyDataSetChanged();
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mHomeAdapter = new HomeAdapter(mHabits);
-        mRecyclerView.setAdapter(mHomeAdapter);
-        mHomeAdapter.notifyDataSetChanged();
+            }
+        });
 
         return view;
 
     }
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -181,29 +205,52 @@ public class HomeFragment extends Fragment {
     }
 
 
-private void fillHabits(){
+    private void fillHabits() {
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        CollectionReference collectionReference = db.collection("habits");
+
+        /*Query habitsQuery = collectionReference
+                .whereEqualTo("user_id", FirebaseAuth.getInstance().getCurrentUser().getUid());*/
+
+        //habitQuery.get().addOn...   - with query
+
+        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    mHabits = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Habit habit = document.toObject(Habit.class);
+                        mHabits.add(habit);
+                    }
+                    //mHomeAdapter.notifyDataSetChanged();
+
+                } else {
+                    Log.w(TAG, "Failed to read value.");
+                }
+            }
+        });
+
+
+    }
+
+    @Override
+    public void onRefresh() {
+        fillHabits();
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void addHabit() {
         mHabits = new ArrayList<>();
 
-/*        mFirestore.collection("habits").get()
-            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot documentSnapshots) {
-                    if (documentSnapshots.isEmpty()) {
-                        Log.d(TAG, "onSuccess: LIST EMPTY");
-                        return;
-                    } else {
-                        // Convert the whole Query Snapshot to a list
-                        // of objects directly! No need to fetch each
-                        // document.
-                        List<Habit> types = documentSnapshots.toObjects(Habit.class);
+        Habit a = new Habit("Cakes");
+        mHabits.add(a);
 
-                        // Add all to your list
-                        mHabits.addAll(types);
-                        Log.d(TAG, "onSuccess: " + mHabits);
-                    }
-                });
+        Habit b = new Habit("Yoga");
+        mHabits.add(a);
 
-}*/
-}
 
+    }
 }

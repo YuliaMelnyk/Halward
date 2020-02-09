@@ -104,9 +104,10 @@ public class RegisterActivity extends AppCompatActivity {
 
                             User user = new User();
                             user.setId(userId);
-                            user.setName(mName.getText().toString());
+
                             user.setEmail(mEmail.getText().toString());
-                            user.setEmail(mPassword.getText().toString());
+                            user.setName(mName.getText().toString());
+                            user.setPassword(mPassword.getText().toString());
 
                             users.add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                 @Override

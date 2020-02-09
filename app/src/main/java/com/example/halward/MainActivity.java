@@ -11,6 +11,7 @@ import android.os.Bundle;
 // 3) Create SplashActivity  https://android.jlelse.eu/right-way-to-create-splash-screen-on-android-e7f1709ba154
 // https://github.com/rumaan/AcademApp/blob/master/app/src/main/java/com/rumaan/academapp/activities/SplashPageActivity.java
 // 4) Look for the sessions, delete user's data on destroy method
+// 5) Set default picture Add Habit.(when click button Create)
 
 public class MainActivity extends AppCompatActivity {
 

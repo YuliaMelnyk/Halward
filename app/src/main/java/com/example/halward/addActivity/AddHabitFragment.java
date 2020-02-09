@@ -15,22 +15,29 @@ import androidx.fragment.app.Fragment;
 import android.os.Trace;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.halward.R;
 import com.example.halward.calendarPage.CalendarActivity;
 import com.example.halward.homePage.HomeActivity;
 import com.example.halward.homePage.HomeFragment;
 import com.example.halward.model.Habit;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -39,6 +46,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
@@ -78,8 +86,12 @@ public class AddHabitFragment extends Fragment {
     private Habit mHabit;
 
     private static final int PICK_IMAGE = 100;
-    Uri imageUri;
+    private Uri imageUri;
     private String habitImage;
+
+    ProgressBar progressBar;
+
+    //private TextView textProgress;   ---for text  % Progress Bar
 
     public AddHabitFragment() {
         // Required empty public constructor
@@ -97,6 +109,8 @@ public class AddHabitFragment extends Fragment {
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
 
+        progressBar=view.findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
 
         mPhoto = (ImageButton) view.findViewById(R.id.back_home);
         mPhoto.setOnClickListener(new View.OnClickListener() {
@@ -176,7 +190,7 @@ public class AddHabitFragment extends Fragment {
             }
         });
 
-
+// save to
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -186,40 +200,99 @@ public class AddHabitFragment extends Fragment {
                 final String titleName = mTitle.getText().toString();
                 final String descHabit = mDescription.getText().toString();
                 final String durTime = mDuration.getText().toString();
-                putFile().addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        Task<Uri> uriTask = taskSnapshot.getStorage().getDownloadUrl();
-                        Uri downloadUrl = uriTask.getResult();
-                        habitImage = downloadUrl.toString();
+                //if (imageUri != null) {
 
-                        if (!TextUtils.isEmpty(titleName) && !TextUtils.isEmpty(descHabit) && !TextUtils.isEmpty(durTime) && mPhoto != null) {
-                            Habit habit = new Habit();
-                            habit.setName(titleName);
-                            habit.setDescription(descHabit);
-                            habit.setDuration(Integer.parseInt(durTime));
-                            habit.setImage(habitImage);
+                progressBar.setProgress(0);
+                progressBar.setVisibility(View.VISIBLE);
+                    putFile().addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0*taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
+                            progressBar.setProgress((int)progress);
+                            //textProgress.setText((int)progress+"%");     ---   for text  % Progress Bar
 
-                            habits.add(habit).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                @Override
-                                public void onSuccess(DocumentReference documentReference) {
-
-                                }
-                            });
-                            Intent myIntent = new Intent(getActivity(), CalendarActivity.class);
-                            getActivity().startActivity(myIntent);
-                        } else {
-                            Toast.makeText(mContext, "Fill all the fields", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                });
+                    }).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                        @Override
+                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                            if (!task.isSuccessful()) {
+                                throw task.getException();
+                            }
+
+                            // Continue with the task to get the download URL
+                            return task.getResult().getStorage().getDownloadUrl();
+                        }
+                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void  onComplete(@NonNull Task<Uri> task) {
+
+                            //progressBar.setVisibility(View.INVISIBLE);
+
+                            Uri downloadUrl = task.getResult();
+                            habitImage = downloadUrl.toString();
+
+                            if (!TextUtils.isEmpty(titleName) && !TextUtils.isEmpty(descHabit) && !TextUtils.isEmpty(durTime)) {
+                                Habit habit = new Habit();
+                                habit.setName(titleName);
+                                habit.setDescription(descHabit);
+                                habit.setDuration(Integer.parseInt(durTime));
+                                habit.setImage(habitImage);
+
+                                habits.add(habit).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        Intent myIntent = new Intent(getActivity(), CalendarActivity.class);
+                                        getActivity().startActivity(myIntent);
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_LONG).show();
+                                        Log.e("NoInsertaHabit", e.getStackTrace().toString());
+                                    }
+                                });
+
+                            } else {
+                                Toast.makeText(mContext, "Fill all the fields", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_LONG).show();
+                            Log.e("NoInsertaHabit", e.getStackTrace().toString());
+                        }
+                    });
+               // } else {
+                 //   if (!TextUtils.isEmpty(titleName) && !TextUtils.isEmpty(descHabit) && !TextUtils.isEmpty(durTime)) {
+                   //     Habit habit = new Habit();
+                     //   habit.setName(titleName);
+                       // habit.setDescription(descHabit);
+                       // habit.setDuration(Integer.parseInt(durTime));
+            //habit.setImage(habitImage);
+
+              //          habits.add(habit).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                //            @Override
+                  //          public void onSuccess(DocumentReference documentReference) {
+
+                    //        }
+                      //  });
+                      //  Intent myIntent = new Intent(getActivity(), CalendarActivity.class);
+                        //getActivity().startActivity(myIntent);
+                    //} else {
+                      //  Toast.makeText(mContext, "Fill all the fields", Toast.LENGTH_SHORT).show();
+                    //}
+                //}
             }
         });
 
         return view;
     }
-    private StorageTask<UploadTask.TaskSnapshot> putFile(){
-        StorageReference ref = mStorageRef.child(System.currentTimeMillis()+"."+getExtenion(imageUri));
+
+    private StorageTask<UploadTask.TaskSnapshot> putFile() {
+        StorageReference ref = mStorageRef.child(System.currentTimeMillis() + "." + getExtenion(imageUri));
 
         return ref.putFile(imageUri)
                 .addOnFailureListener(new OnFailureListener() {
@@ -230,13 +303,18 @@ public class AddHabitFragment extends Fragment {
                         // ...
                     }
                 });
+
     }
 
-    private String getExtenion(Uri uri){
+    private String getExtenion(Uri uri) {
+        if (uri == null) {
+            return null;
+        }
         ContentResolver cr = getApplicationContext().getContentResolver();
         MimeTypeMap mimeTypeMap = MimeTypeMap.getSingleton();
         return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
     }
+
     private void openGallery() {
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery, PICK_IMAGE);
@@ -250,5 +328,13 @@ public class AddHabitFragment extends Fragment {
             mPhoto.setImageURI(imageUri);
         }
     }
+
+    //private void hideKeyboard() {
+    //    View view = getCurrentFocus();
+    //    if (view != null) {
+    //        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
+    //                .hideSoftInputFromWindow(view.getWindowToken(), 0);
+    //    }
+    //}
 
 }
