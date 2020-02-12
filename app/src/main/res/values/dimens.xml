@@ -6,6 +6,7 @@
     <dimen name="linear_padding">8dp</dimen>
     <dimen name="textview_margin">16dp</dimen>
     <dimen name="card_text_size">18sp</dimen>
+    <dimen name="title_text">25sp</dimen>
     <dimen name="detail_backdrop_height">160dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>

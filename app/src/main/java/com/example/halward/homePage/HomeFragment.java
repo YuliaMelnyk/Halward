@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.halward.ProgressActivity;
 import com.example.halward.R;
 import com.example.halward.addActivity.AddHabitActivity;
 import com.example.halward.calendarPage.CalendarActivity;
@@ -91,13 +92,9 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         view = inflater.inflate(R.layout.fragment_home, container, false);
 
-
         mFirebaseAuth = FirebaseAuth.getInstance();
         user = mFirebaseAuth.getCurrentUser();
         userName = user.getDisplayName();
-
-        BottomNavigationView navView = view.findViewById(R.id.nav_view);
-        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
@@ -121,15 +118,11 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    mHabits = new ArrayList<>();
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        //final Habit habit = new Habit();
-                        /*habit.setName(document.get("name").toString());
-                        habit.setDescription(document.get("description").toString());
-                        String habit_id = document.getId();*/
-                        Habit habit = document.toObject(Habit.class);
-                        mHabits.add(habit);
-                    }
+                mHabits = new ArrayList<>();
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Habit habit = document.toObject(Habit.class);
+                    mHabits.add(habit);
+                }
 
                 mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
                 // mRecyclerView.setHasFixedSize(true);
@@ -138,42 +131,11 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 mHomeAdapter = new HomeAdapter(getContext(), mHabits);
                 mRecyclerView.setAdapter(mHomeAdapter);
                 mHomeAdapter.notifyDataSetChanged();
-
             }
         });
 
         return view;
-
     }
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.nav_home:
-                    return true;
-                case R.id.nav_calendar:
-                    Intent myIntent = new Intent(getActivity(), CalendarActivity.class);
-                    myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    getActivity().startActivity(myIntent);
-                    return true;
-                case R.id.nav_create:
-                    Intent intent = new Intent(getActivity(), AddHabitActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    getActivity().startActivity(intent);
-                    return true;
-                case R.id.nav_progress:
-                    break;
-                case R.id.nav_profile:
-                    break;
-                default:
-                    break;
-            }
-            return false;
-        }
-    };
 
 
     public void initCollapsingToolbar() {
@@ -211,11 +173,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         CollectionReference collectionReference = db.collection("habits");
 
-        /*Query habitsQuery = collectionReference
-                .whereEqualTo("user_id", FirebaseAuth.getInstance().getCurrentUser().getUid());*/
-
-        //habitQuery.get().addOn...   - with query
-
         collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -240,17 +197,5 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public void onRefresh() {
         fillHabits();
         mSwipeRefreshLayout.setRefreshing(false);
-    }
-
-    private void addHabit() {
-        mHabits = new ArrayList<>();
-
-        Habit a = new Habit("Cakes");
-        mHabits.add(a);
-
-        Habit b = new Habit("Yoga");
-        mHabits.add(a);
-
-
     }
 }

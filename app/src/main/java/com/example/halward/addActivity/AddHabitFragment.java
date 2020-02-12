@@ -1,6 +1,7 @@
 package com.example.halward.addActivity;
 
 
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +24,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -89,6 +91,8 @@ public class AddHabitFragment extends Fragment {
     private Uri imageUri;
     private String habitImage;
 
+    FrameLayout mView;
+
     ProgressBar progressBar;
 
     //private TextView textProgress;   ---for text  % Progress Bar
@@ -108,8 +112,9 @@ public class AddHabitFragment extends Fragment {
         auth = FirebaseAuth.getInstance();
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
+        mView = (FrameLayout) view.findViewById(R.id.view_progressBar);
 
-        progressBar=view.findViewById(R.id.progressBar);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
 
         mPhoto = (ImageButton) view.findViewById(R.id.back_home);
@@ -130,6 +135,7 @@ public class AddHabitFragment extends Fragment {
         mButton = (Button) view.findViewById(R.id.add_button);
 
         mDuration = (EditText) view.findViewById(R.id.add_duration);
+        hideKeyboardFrom(getContext(), view);
 
         mPhoto = (ImageButton) view.findViewById(R.id.add_photo);
         mPhoto.setOnClickListener(new View.OnClickListener() {
@@ -190,100 +196,100 @@ public class AddHabitFragment extends Fragment {
             }
         });
 
-// save to
+
+// save to FireBase
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
 
                 final CollectionReference habits = mFirestore.collection("habits");
                 final String titleName = mTitle.getText().toString();
                 final String descHabit = mDescription.getText().toString();
                 final String durTime = mDuration.getText().toString();
                 //if (imageUri != null) {
-
+                mView.setVisibility(View.VISIBLE);
                 progressBar.setProgress(0);
                 progressBar.setVisibility(View.VISIBLE);
-                    putFile().addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0*taskSnapshot.getBytesTransferred())/taskSnapshot.getTotalByteCount();
-                            progressBar.setProgress((int)progress);
-                            //textProgress.setText((int)progress+"%");     ---   for text  % Progress Bar
+                putFile().addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                        progressBar.setProgress((int) progress);
+                        //textProgress.setText((int)progress+"%");     ---   for text  % Progress Bar
 
-                        }
-                    }).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                        @Override
-                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                            if (!task.isSuccessful()) {
-                                throw task.getException();
-                            }
-
-                            // Continue with the task to get the download URL
-                            return task.getResult().getStorage().getDownloadUrl();
-                        }
-                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void  onComplete(@NonNull Task<Uri> task) {
-
-                            //progressBar.setVisibility(View.INVISIBLE);
-
-                            Uri downloadUrl = task.getResult();
-                            habitImage = downloadUrl.toString();
-
-                            if (!TextUtils.isEmpty(titleName) && !TextUtils.isEmpty(descHabit) && !TextUtils.isEmpty(durTime)) {
-                                Habit habit = new Habit();
-                                habit.setName(titleName);
-                                habit.setDescription(descHabit);
-                                habit.setDuration(Integer.parseInt(durTime));
-                                habit.setImage(habitImage);
-
-                                habits.add(habit).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                    @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-                                        Intent myIntent = new Intent(getActivity(), CalendarActivity.class);
-                                        getActivity().startActivity(myIntent);
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_LONG).show();
-                                        Log.e("NoInsertaHabit", e.getStackTrace().toString());
-                                    }
-                                });
-
-                            } else {
-                                Toast.makeText(mContext, "Fill all the fields", Toast.LENGTH_SHORT).show();
-                            }
+                    }
+                }).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    @Override
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if (!task.isSuccessful()) {
+                            throw task.getException();
                         }
 
+                        // Continue with the task to get the download URL
+                        return task.getResult().getStorage().getDownloadUrl();
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
 
-                    }).addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_LONG).show();
-                            Log.e("NoInsertaHabit", e.getStackTrace().toString());
+                        //progressBar.setVisibility(View.INVISIBLE);
+
+                        Uri downloadUrl = task.getResult();
+                        habitImage = downloadUrl.toString();
+
+                        if (!TextUtils.isEmpty(titleName) && !TextUtils.isEmpty(descHabit) && !TextUtils.isEmpty(durTime)) {
+                            Habit habit = new Habit();
+                            habit.setName(titleName);
+                            habit.setDescription(descHabit);
+                            habit.setDuration(Integer.parseInt(durTime));
+                            habit.setImage(habitImage);
+
+                            habits.add(habit).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Intent myIntent = new Intent(getActivity(), HomeActivity.class);
+                                    getActivity().startActivity(myIntent);
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_LONG).show();
+                                    Log.e("NoInsertaHabit", e.getStackTrace().toString());
+                                }
+                            });
+
+                        } else {
+                            Toast.makeText(mContext, "Fill all the fields", Toast.LENGTH_SHORT).show();
                         }
-                    });
-               // } else {
-                 //   if (!TextUtils.isEmpty(titleName) && !TextUtils.isEmpty(descHabit) && !TextUtils.isEmpty(durTime)) {
-                   //     Habit habit = new Habit();
-                     //   habit.setName(titleName);
-                       // habit.setDescription(descHabit);
-                       // habit.setDuration(Integer.parseInt(durTime));
-            //habit.setImage(habitImage);
+                    }
 
-              //          habits.add(habit).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_LONG).show();
+                        Log.e("NoInsertaHabit", e.getStackTrace().toString());
+                    }
+                });
+                // } else {
+                //   if (!TextUtils.isEmpty(titleName) && !TextUtils.isEmpty(descHabit) && !TextUtils.isEmpty(durTime)) {
+                //     Habit habit = new Habit();
+                //   habit.setName(titleName);
+                // habit.setDescription(descHabit);
+                // habit.setDuration(Integer.parseInt(durTime));
+                //habit.setImage(habitImage);
+
+                //          habits.add(habit).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 //            @Override
-                  //          public void onSuccess(DocumentReference documentReference) {
+                //          public void onSuccess(DocumentReference documentReference) {
 
-                    //        }
-                      //  });
-                      //  Intent myIntent = new Intent(getActivity(), CalendarActivity.class);
-                        //getActivity().startActivity(myIntent);
-                    //} else {
-                      //  Toast.makeText(mContext, "Fill all the fields", Toast.LENGTH_SHORT).show();
-                    //}
+                //        }
+                //  });
+                //  Intent myIntent = new Intent(getActivity(), CalendarActivity.class);
+                //getActivity().startActivity(myIntent);
+                //} else {
+                //  Toast.makeText(mContext, "Fill all the fields", Toast.LENGTH_SHORT).show();
+                //}
                 //}
             }
         });
@@ -329,12 +335,9 @@ public class AddHabitFragment extends Fragment {
         }
     }
 
-    //private void hideKeyboard() {
-    //    View view = getCurrentFocus();
-    //    if (view != null) {
-    //        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE))
-    //                .hideSoftInputFromWindow(view.getWindowToken(), 0);
-    //    }
-    //}
+    public static void hideKeyboardFrom(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 
 }

@@ -13,6 +13,7 @@ import android.os.Bundle;
 // 4) Look for the sessions, delete user's data on destroy method
 // 5) Set default picture Add Habit.(when click button Create)
 
+
 public class MainActivity extends AppCompatActivity {
 
     @Override

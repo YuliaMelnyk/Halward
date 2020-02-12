@@ -42,4 +42,5 @@
     <string name="days">days</string>
     <string name="on_days">On days</string>
     <string name="add_photo">Choose photo</string>
+    <string name="calendar">Calendar</string>
 </resources>

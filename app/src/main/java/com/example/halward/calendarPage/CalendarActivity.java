@@ -6,13 +6,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CalendarView;
 
 import com.example.halward.R;
 import com.example.halward.homePage.HomeActivity;
 import com.example.halward.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class CalendarActivity extends AppCompatActivity {
+
+    CalendarView mCalendarView;
+    String selectedDate;
 
     public static final String EXTRA_CALENDAR_ID = "com.example.halward.calendar_id";
 
@@ -21,13 +28,16 @@ public class CalendarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
+        mCalendarView = (CalendarView) findViewById(R.id.calendarView);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        selectedDate = sdf.format(new Date(mCalendarView.getDate()));
+
     }
-    public static Intent newIntent(Context packageContext, String email){
+/*    public static Intent newIntent(Context packageContext, String email){
         Intent intent = new Intent(packageContext, CalendarActivity.class);
         intent.putExtra(EXTRA_CALENDAR_ID, email);
         return intent;
-    }
-
+    }*/
 
     public void logOut(View view) {
         FirebaseAuth.getInstance().signOut(); // logout
