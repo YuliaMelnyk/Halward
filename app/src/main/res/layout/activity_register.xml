@@ -6,7 +6,7 @@
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ee8972"
+    android:background="@color/colorPrimary"
     tools:context=".login.RegisterActivity">
 
     <TextView

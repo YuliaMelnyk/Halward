@@ -54,6 +54,10 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import io.grpc.Compressor;
 
@@ -206,6 +210,7 @@ public class AddHabitFragment extends Fragment {
                 final String titleName = mTitle.getText().toString();
                 final String descHabit = mDescription.getText().toString();
                 final String durTime = mDuration.getText().toString();
+
                 //if (imageUri != null) {
                 mView.setVisibility(View.VISIBLE);
                 progressBar.setProgress(0);
@@ -243,6 +248,22 @@ public class AddHabitFragment extends Fragment {
                             habit.setDescription(descHabit);
                             habit.setDuration(Integer.parseInt(durTime));
                             habit.setImage(habitImage);
+
+                            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                            //Getting current date
+                            Calendar cal = Calendar.getInstance();
+
+                            //Number of Days to add
+                            cal.add(Calendar.DAY_OF_MONTH, Integer.parseInt(durTime));
+                            //Date after adding the days to the current date
+                            String endDate = sdf.format(cal.getTime());
+                            Date date1= null;
+                            try {
+                                date1 = new SimpleDateFormat("yyyy/MM/dd").parse(endDate);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            habit.setEndDate(date1);
 
                             habits.add(habit).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                 @Override

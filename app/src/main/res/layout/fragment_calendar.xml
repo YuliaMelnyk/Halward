@@ -12,37 +12,35 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="20dp"
-        android:background="@color/nav_primary_second"
+        android:background="@color/colorAccent"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-
-        <TextView
-            android:id="@+id/add_title"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="35dp"
-            android:layout_marginBottom="-8dp"
-            android:text="@string/calendar"
-            android:textAlignment="center"
-            android:textColor="@color/colorAccent"
-            android:textSize="@dimen/title_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/back_home" />
-
-
         <CalendarView
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorAccent"
+            android:layout_marginTop="10dp"
             android:dateTextAppearance="@style/CalenderViewDateCustomText"
             android:theme="@style/CalenderViewCustom"
             android:weekDayTextAppearance="@style/CalenderViewWeekCustomText" />
+
+        <LinearLayout
+            android:id="@+id/todayHabits"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/shape"
+            app:layout_constraintTop_toBottomOf="@id/calendarView"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <include layout="@layout/content_habit_calendar" />
+
+        </LinearLayout>
     </LinearLayout>
 
 

@@ -13,8 +13,7 @@ import com.example.halward.homePage.HomeActivity;
 import com.example.halward.login.LoginActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 
 public class CalendarActivity extends AppCompatActivity {
 
@@ -28,9 +27,6 @@ public class CalendarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
 
-        mCalendarView = (CalendarView) findViewById(R.id.calendarView);
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        selectedDate = sdf.format(new Date(mCalendarView.getDate()));
 
     }
 /*    public static Intent newIntent(Context packageContext, String email){
@@ -39,12 +35,12 @@ public class CalendarActivity extends AppCompatActivity {
         return intent;
     }*/
 
-    public void logOut(View view) {
+    /*public void logOut(View view) {
         FirebaseAuth.getInstance().signOut(); // logout
         Intent intent = new Intent(CalendarActivity.this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
-    }
+    }*/
 }
