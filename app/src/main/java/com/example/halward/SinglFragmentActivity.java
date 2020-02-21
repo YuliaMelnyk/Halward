@@ -14,16 +14,16 @@ public abstract class SinglFragmentActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_home);
+        setContentView(R.layout.fragment_profile);
 
 
         FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.home_habit);
+        Fragment fragment = fm.findFragmentById(R.id.profile_fragment);
 
         if (fragment == null){
             fragment = createFragment();
             fm.beginTransaction()
-                    .add(R.id.home_habit, fragment)
+                    .add(R.id.profile_fragment, fragment)
                     .commit();
         }
     }

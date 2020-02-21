@@ -57,7 +57,7 @@ public class CalendarFragment extends Fragment implements SwipeRefreshLayout.OnR
     View view;
     String selectedDate;
     public static String userName;
-    private  Date date;
+    private Date date;
 
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -84,46 +84,44 @@ public class CalendarFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         selectedDate = sdf.format(new Date(mCalendarView.getDate()));
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference collectionReference = db.collection("habits");
-
         mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
 
             @Override
-            public void onSelectedDayChange(CalendarView view, int year, int month,
+            public void onSelectedDayChange(CalendarView calendarView, int year, int month,
                                             int dayOfMonth) {
-                date = new Date(view.getDate());
-            }
-        });
-        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                mHabits = new ArrayList<>();
-                date = new Date(mCalendarView.getDate());
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    Habit habit = document.toObject(Habit.class);
 
+                final Calendar cal = Calendar.getInstance();
+                cal.set(year, month, dayOfMonth);
 
-                    if (date.compareTo(habit.getStartDate()) == 0
-                            || date.compareTo(habit.getEndDate()) == 0
-                            || (date.after(habit.getStartDate()) && date.before(habit.getEndDate()))) {
-                        mHabits.add(habit);
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                CollectionReference collectionReference = db.collection("habits");
+                collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        mHabits = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            Habit habit = document.toObject(Habit.class);
+                            if (cal.getTime().compareTo(habit.getStartDate()) == 0
+                                    || cal.getTime().compareTo(habit.getEndDate()) == 0
+                                    || (cal.getTime().after(habit.getStartDate()) && cal.getTime().before(habit.getEndDate()))) {
+                                mHabits.add(habit);
+                            }
+                        }
+                        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_calendar);
+                        // mRecyclerView.setHasFixedSize(true);
+
+                        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        mCalendarAdapter = new CalendarAdapter(mHabits, getContext());
+                        mRecyclerView.setAdapter(mCalendarAdapter);
+                        mCalendarAdapter.notifyDataSetChanged();
                     }
-                }
-
-                mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_calendar);
-                // mRecyclerView.setHasFixedSize(true);
-
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                mCalendarAdapter = new CalendarAdapter(mHabits, getContext());
-                mRecyclerView.setAdapter(mCalendarAdapter);
-                mCalendarAdapter.notifyDataSetChanged();
+                });
             }
         });
         return view;
     }
 
-
+/*
     private void fillHabits() {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -146,20 +144,13 @@ public class CalendarFragment extends Fragment implements SwipeRefreshLayout.OnR
                 }
             }
         });
-    }
+    }*/
 
     @Override
     public void onRefresh() {
-        fillHabits();
+
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
-    public void logOut(View view) {
-        FirebaseAuth.getInstance().signOut(); // logout
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        getActivity().startActivity(intent);
-    }
 
 }

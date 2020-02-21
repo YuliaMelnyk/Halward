@@ -9,10 +9,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import com.example.halward.ProgileFragment;
+import com.example.halward.profilePage.ProfileActivity;
+import com.example.halward.profilePage.ProfileFragment;
 import com.example.halward.ProgressFragment;
 import com.example.halward.R;
-import com.example.halward.SinglFragmentActivity;
 import com.example.halward.addActivity.AddHabitActivity;
 import com.example.halward.addActivity.AddHabitFragment;
 import com.example.halward.calendarPage.CalendarFragment;
@@ -58,7 +58,7 @@ public class HomeActivity extends AppCompatActivity {
         mFragments.add(new CalendarFragment());
         mFragments.add(new AddHabitFragment());
         mFragments.add(new ProgressFragment());
-        mFragments.add(new ProgileFragment());
+        mFragments.add(new ProfileFragment());
 
         setFragmentPosition(0);
     }
@@ -84,8 +84,9 @@ public class HomeActivity extends AppCompatActivity {
                     setFragmentPosition(3);
                     return true;
                 case R.id.nav_profile:
-                    setFragmentPosition(4);
-                    return true;
+                    Intent myIntent2 = new Intent(HomeActivity.this, ProfileActivity.class);
+                    myIntent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(myIntent2);
                 default:
                     break;
             }

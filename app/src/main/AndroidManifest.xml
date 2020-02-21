@@ -24,6 +24,7 @@
         <activity android:name=".homePage.HomeActivity" />
         <activity android:name=".addActivity.AddHabitActivity"></activity>
         <activity android:name=".ProgressActivity" />
+        <activity android:name=".profilePage.ProfileActivity" />
         <activity android:name=".calendarPage.CalendarActivity" />
 
         <meta-data
