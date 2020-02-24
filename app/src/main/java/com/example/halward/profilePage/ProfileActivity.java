@@ -12,13 +12,9 @@ import com.example.halward.SinglFragmentActivity;
  * @author yuliiamelnyk on 2020-02-20
  * @project Halward
  */
-public class ProfileActivity extends SinglFragmentActivity {
+public class ProfileActivity extends AppCompatActivity {
 
 
-    @Override
-    protected Fragment createFragment() {
-        return new ProfileFragment();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

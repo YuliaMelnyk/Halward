@@ -1,5 +1,7 @@
 package com.example.halward.model;
 
+import android.net.Uri;
+
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
 
@@ -15,6 +17,7 @@ public class User {
     private String name;
     private String password;
     private List<Habit> mHabits;
+    private Uri mPhoto;
 
     public User() {
     }
@@ -57,8 +60,20 @@ public class User {
         this.id = id;
     }
 
+    public Uri getPhoto() {
+        return mPhoto;
+    }
+
+    public void setPhoto(Uri photo) {
+        mPhoto = photo;
+    }
+
     public List<Habit> getHabits() {
         return mHabits;
+    }
+
+    public void setHabits(List<Habit> habits) {
+        mHabits = habits;
     }
 }
 

@@ -2,6 +2,7 @@ package com.example.halward.login;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -98,6 +99,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private LoginButton facebookButton;
 
     public String personName, gmail;
+    public Uri gPhoto;
     private String idToken;
 
 
@@ -143,7 +145,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                             }
                         });
                 Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,email,gender, birthday");
+                parameters.putString("fields", "id,name,email,gender, birthday, picture");
                 request.setParameters(parameters);
                 request.executeAsync();
             }
@@ -288,6 +290,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             idToken = account.getIdToken();
             personName = account.getDisplayName();
             gmail = account.getEmail();
+            gPhoto = account.getPhotoUrl();
 
             // you can store user data to SharedPreference
             AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);

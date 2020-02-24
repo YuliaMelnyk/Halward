@@ -211,7 +211,7 @@ public class AddHabitFragment extends Fragment {
                 final String descHabit = mDescription.getText().toString();
                 final String durTime = mDuration.getText().toString();
 
-                //if (imageUri != null) {
+                if (imageUri != null) {
                 mView.setVisibility(View.VISIBLE);
                 progressBar.setProgress(0);
                 progressBar.setVisibility(View.VISIBLE);
@@ -242,7 +242,7 @@ public class AddHabitFragment extends Fragment {
                         Uri downloadUrl = task.getResult();
                         habitImage = downloadUrl.toString();
 
-                        if (!TextUtils.isEmpty(titleName) && !TextUtils.isEmpty(descHabit) && !TextUtils.isEmpty(durTime)) {
+                        if (!TextUtils.isEmpty(titleName) && !TextUtils.isEmpty(descHabit) && !TextUtils.isEmpty(durTime) && !TextUtils.isEmpty(habitImage)) {
                             Habit habit = new Habit();
                             habit.setName(titleName);
                             habit.setDescription(descHabit);
@@ -279,7 +279,8 @@ public class AddHabitFragment extends Fragment {
                                 }
                             });
 
-                        } else {
+                        }
+                        else {
                             Toast.makeText(mContext, "Fill all the fields", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -292,26 +293,47 @@ public class AddHabitFragment extends Fragment {
                         Log.e("NoInsertaHabit", e.getStackTrace().toString());
                     }
                 });
-                // } else {
-                //   if (!TextUtils.isEmpty(titleName) && !TextUtils.isEmpty(descHabit) && !TextUtils.isEmpty(durTime)) {
-                //     Habit habit = new Habit();
-                //   habit.setName(titleName);
-                // habit.setDescription(descHabit);
-                // habit.setDuration(Integer.parseInt(durTime));
-                //habit.setImage(habitImage);
+                 } else {
+                   if (!TextUtils.isEmpty(titleName) && !TextUtils.isEmpty(descHabit) && !TextUtils.isEmpty(durTime)){
+                       Habit habit = new Habit();
+                       habit.setName(titleName);
+                       habit.setDescription(descHabit);
+                       habit.setDuration(Integer.parseInt(durTime));
+                       habit.setImage("https://firebasestorage.googleapis.com/v0/b/halward-2932c.appspot.com/o/default.png?alt=media&token=a71f5ff6-01e5-4574-bc32-726fa8f65bd1");
 
-                //          habits.add(habit).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                //            @Override
-                //          public void onSuccess(DocumentReference documentReference) {
+                       SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+                       //Getting current date
+                       Calendar cal = Calendar.getInstance();
 
-                //        }
-                //  });
-                //  Intent myIntent = new Intent(getActivity(), CalendarActivity.class);
-                //getActivity().startActivity(myIntent);
-                //} else {
-                //  Toast.makeText(mContext, "Fill all the fields", Toast.LENGTH_SHORT).show();
-                //}
-                //}
+                       //Number of Days to add
+                       cal.add(Calendar.DAY_OF_MONTH, Integer.parseInt(durTime));
+                       //Date after adding the days to the current date
+                       String endDate = sdf.format(cal.getTime());
+                       Date date1= null;
+                       try {
+                           date1 = new SimpleDateFormat("yyyy/MM/dd").parse(endDate);
+                       } catch (ParseException e) {
+                           e.printStackTrace();
+                       }
+                       habit.setEndDate(date1);
+
+                       habits.add(habit).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                           @Override
+                           public void onSuccess(DocumentReference documentReference) {
+                               Intent myIntent = new Intent(getActivity(), HomeActivity.class);
+                               getActivity().startActivity(myIntent);
+                           }
+                       }).addOnFailureListener(new OnFailureListener() {
+                           @Override
+                           public void onFailure(@NonNull Exception e) {
+                               Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_LONG).show();
+                               Log.e("NoInsertaHabit", e.getStackTrace().toString());
+                           }
+                       });
+                   } else {
+                  Toast.makeText(mContext, "Fill all the fields", Toast.LENGTH_SHORT).show();
+                }
+                }
             }
         });
 
