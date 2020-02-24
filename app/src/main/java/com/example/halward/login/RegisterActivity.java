@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.halward.SplashActivity;
 import com.example.halward.homePage.HomeActivity;
 import com.example.halward.R;
 import com.example.halward.ValidateUser;
@@ -115,7 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                                 }
                             });
-                            Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+                            Intent intent = new Intent(RegisterActivity.this, SplashActivity.class);
                             //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(intent);

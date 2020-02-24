@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.halward.SplashActivity;
 import com.example.halward.homePage.HomeActivity;
 import com.example.halward.R;
 import com.example.halward.ValidateUser;
@@ -174,7 +175,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
 
         if (mFirebaseAuth.getCurrentUser() != null) {
-            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            startActivity(new Intent(getApplicationContext(), SplashActivity.class));
             finish();
         }
 
@@ -320,7 +321,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void gotoProfile() {
-        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        Intent intent = new Intent(LoginActivity.this, SplashActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
