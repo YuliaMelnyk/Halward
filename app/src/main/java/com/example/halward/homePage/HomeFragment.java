@@ -1,64 +1,50 @@
 package com.example.halward.homePage;
 
 
-import android.content.Intent;
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.halward.ProgressActivity;
 import com.example.halward.R;
-import com.example.halward.addActivity.AddHabitActivity;
-import com.example.halward.calendarPage.CalendarActivity;
-import com.example.halward.login.LoginActivity;
+import com.example.halward.SwipeToDeleteCallback;
 import com.example.halward.model.Habit;
-import com.example.halward.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 import static android.content.ContentValues.TAG;
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 
 /**
@@ -66,21 +52,29 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  */
 public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    private List<Habit> mHabits;
+    private ArrayList<Habit> mHabits;
     private RecyclerView mRecyclerView;
     private HomeAdapter mHomeAdapter;
     private View view;
     private TextView mHelloText;
+    private Habit item;
+    private CoordinatorLayout mCoordinatorLayout;
+    private CollectionReference collectionReference;
+    private FirebaseFirestore db;
+
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private FirebaseUser user;
     private FirebaseAuth mFirebaseAuth;
     public static String userName;
+    private Context mContext;
 
 
-    public static Fragment newInstance() {
-        return new HomeFragment();
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mContext = context;
     }
 
     @Nullable
@@ -88,7 +82,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         Log.d("TestFailed", "OnCreateView");
-
 
         view = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -112,8 +105,8 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mHelloText = (TextView) view.findViewById(R.id.hello);
         mHelloText.setText("Hello " + userName + "!");
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference collectionReference = db.collection("habits");
+        db = FirebaseFirestore.getInstance();
+        collectionReference = db.collection("habits");
 
         collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -125,17 +118,68 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 }
 
                 mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+                mCoordinatorLayout = view.findViewById(R.id.home_habit);
                 // mRecyclerView.setHasFixedSize(true);
-
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                 mHomeAdapter = new HomeAdapter(getContext(), mHabits);
                 mRecyclerView.setAdapter(mHomeAdapter);
                 mHomeAdapter.notifyDataSetChanged();
+
+                enableSwipeToDeleteAndUndo();
             }
         });
 
         return view;
     }
+
+    //Delete habit with Swipe Left
+
+  private void enableSwipeToDeleteAndUndo() {
+      SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getActivity()) {
+          @Override
+          public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+
+
+              final int position = viewHolder.getAdapterPosition();
+              item = mHomeAdapter.getData().get(position);
+              mHomeAdapter.removeItem(position);
+
+              // delete habit from Firebase
+              final CollectionReference habits = db.collection("habits");
+
+
+              collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                  @Override
+                  public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                      if (task.isSuccessful()) {
+                          habits.document().delete();
+                          mHabits.remove(item);
+                      } else {
+                          Log.w(TAG, "Failed to read value.");
+                      }
+                  }
+              });
+
+              Snackbar snackbar = Snackbar
+                      .make(mCoordinatorLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);
+              snackbar.setAction("UNDO", new View.OnClickListener() {
+                  @Override
+                  public void onClick(View view) {
+
+                      mHomeAdapter.restoreItem(item, position);
+                      mRecyclerView.scrollToPosition(position);
+                  }
+              });
+
+              snackbar.setActionTextColor(Color.YELLOW);
+              snackbar.show();
+          }
+      };
+      ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
+      itemTouchhelper.attachToRecyclerView(mRecyclerView);
+
+
+  }
 
 
     public void initCollapsingToolbar() {
@@ -167,7 +211,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
 
-    private void fillHabits() {
+    public void fillHabits() {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -190,12 +234,16 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             }
         });
 
-
     }
 
     @Override
     public void onRefresh() {
         fillHabits();
         mSwipeRefreshLayout.setRefreshing(false);
+    }
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mContext = null;
     }
 }

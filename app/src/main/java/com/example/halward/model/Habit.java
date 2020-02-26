@@ -80,4 +80,8 @@ public class Habit implements Serializable, Comparable<Habit> {
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
+
+    public UUID getKey() {
+        return key;
+    }
 }
