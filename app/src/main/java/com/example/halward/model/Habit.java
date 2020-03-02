@@ -11,19 +11,17 @@ public class Habit implements Serializable, Comparable<Habit> {
     private String description;
     private int duration;
     private String image;
-    private UUID key;
+    private String key;
     @DocumentId
     private String documentName;//
     private Date startDate;
     private Date endDate;
 
-    public Habit(UUID key, Date startDate) {
-        key = UUID.randomUUID();
+    public Habit() {
+        key = Double.toString( Math.random());
         startDate = new Date();
     }
-    public Habit(){
 
-    }
 
     public Habit(String name, int duration, String image) {
         this.name = name;
@@ -89,11 +87,11 @@ public class Habit implements Serializable, Comparable<Habit> {
         this.endDate = endDate;
     }
 
-    public UUID getKey() {
+    public String getKey() {
         return key;
     }
 
-    public void setKey(UUID key) {
+    public void setKey(String key) {
         this.key = key;
     }
 

@@ -203,6 +203,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         });
     }
 
+    // takes habits from Firebase and fill them in the Home PAge
 
     public void fillHabits() {
 
@@ -226,7 +227,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 }
             }
         });
-
     }
 
     @Override

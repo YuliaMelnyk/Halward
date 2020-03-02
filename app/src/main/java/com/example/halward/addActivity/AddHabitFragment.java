@@ -241,7 +241,6 @@ public class AddHabitFragment extends Fragment {
                             habit.setDescription(descHabit);
                             habit.setStartDate(new Date());
                             habit.setDuration(Integer.parseInt(durTime));
-                            //habit.setKey(UUID.randomUUID());
                             habit.setImage(habitImage);
 
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
@@ -295,7 +294,6 @@ public class AddHabitFragment extends Fragment {
                        habit.setDescription(descHabit);
                        habit.setStartDate(new Date());
                        habit.setDuration(Integer.parseInt(durTime));
-                       //habit.setKey(UUID.randomUUID());
                        habit.setImage("https://firebasestorage.googleapis.com/v0/b/halward-2932c.appspot.com/o/default.png?alt=media&token=a71f5ff6-01e5-4574-bc32-726fa8f65bd1");
 
                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
