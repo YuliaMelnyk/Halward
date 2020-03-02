@@ -9,7 +9,6 @@ import android.os.Bundle;
 // https://github.com/andrebts/login-basics/blob/master/app/src/main/java/bscorp/appbase/LoginActivity.java
 // 2) Check if all works. Add functionality - forgot password.
 // 3) Look for the sessions, delete user's data on destroy method
-// 4) Swipe to delete Habit
 
 
 public class MainActivity extends AppCompatActivity {

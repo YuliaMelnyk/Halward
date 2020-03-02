@@ -28,6 +28,8 @@ import com.example.halward.R;
 import com.example.halward.SwipeToDeleteCallback;
 import com.example.halward.model.Habit;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -36,6 +38,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -134,52 +137,42 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     //Delete habit with Swipe Left
 
-  private void enableSwipeToDeleteAndUndo() {
-      SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getActivity()) {
-          @Override
-          public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+    private void enableSwipeToDeleteAndUndo() {
+        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(getActivity()) {
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
 
-              final int position = viewHolder.getAdapterPosition();
-              item = mHomeAdapter.getData().get(position);
-              mHomeAdapter.removeItem(position);
+                final int position = viewHolder.getAdapterPosition();
+                item = mHomeAdapter.getData().get(position);
+                mHomeAdapter.removeItem(position);
 
-              // delete habit from Firebase
-              final CollectionReference habits = db.collection("habits");
+                // delete habit from Firebase
+                CollectionReference habits = db.collection("habits");
 
+                habits.document(item.getDocumentName()).delete();
+                mHabits.remove(item);
 
-              collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                  @Override
-                  public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                      if (task.isSuccessful()) {
-                          habits.document().delete();
-                          mHabits.remove(item);
-                      } else {
-                          Log.w(TAG, "Failed to read value.");
-                      }
-                  }
-              });
+                Snackbar snackbar = Snackbar
+                        .make(mCoordinatorLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);
+                snackbar.setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
-              Snackbar snackbar = Snackbar
-                      .make(mCoordinatorLayout, "Item was removed from the list.", Snackbar.LENGTH_LONG);
-              snackbar.setAction("UNDO", new View.OnClickListener() {
-                  @Override
-                  public void onClick(View view) {
+                        mHomeAdapter.restoreItem(item, position);
+                        mRecyclerView.scrollToPosition(position);
+                    }
+                });
 
-                      mHomeAdapter.restoreItem(item, position);
-                      mRecyclerView.scrollToPosition(position);
-                  }
-              });
-
-              snackbar.setActionTextColor(Color.YELLOW);
-              snackbar.show();
-          }
-      };
-      ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
-      itemTouchhelper.attachToRecyclerView(mRecyclerView);
+                snackbar.setActionTextColor(Color.YELLOW);
+                snackbar.show();
+            }
+        };
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
+        itemTouchhelper.attachToRecyclerView(mRecyclerView);
 
 
-  }
+    }
 
 
     public void initCollapsingToolbar() {
@@ -241,6 +234,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         fillHabits();
         mSwipeRefreshLayout.setRefreshing(false);
     }
+
     @Override
     public void onDetach() {
         super.onDetach();

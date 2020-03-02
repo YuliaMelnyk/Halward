@@ -1,5 +1,7 @@
 package com.example.halward.model;
 
+import com.google.firebase.firestore.DocumentId;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
@@ -10,12 +12,17 @@ public class Habit implements Serializable, Comparable<Habit> {
     private int duration;
     private String image;
     private UUID key;
+    @DocumentId
+    private String documentName;//
     private Date startDate;
     private Date endDate;
 
-    public Habit() {
+    public Habit(UUID key, Date startDate) {
         key = UUID.randomUUID();
         startDate = new Date();
+    }
+    public Habit(){
+
     }
 
     public Habit(String name, int duration, String image) {
@@ -32,6 +39,7 @@ public class Habit implements Serializable, Comparable<Habit> {
     public int compareTo(Habit habit) {
         return 0;
     }
+
 
     public String getName() {
         return name;
@@ -83,5 +91,17 @@ public class Habit implements Serializable, Comparable<Habit> {
 
     public UUID getKey() {
         return key;
+    }
+
+    public void setKey(UUID key) {
+        this.key = key;
+    }
+
+    public String getDocumentName() {
+        return documentName;
+    }
+
+    public void setDocumentName(String documentName) {
+        this.documentName = documentName;
     }
 }
