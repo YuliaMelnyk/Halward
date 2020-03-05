@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,8 +26,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.Map;
+import static com.example.halward.login.LoginActivity.currentUser;
 
 public class RegisterActivity extends AppCompatActivity {
     private EditText mEmail, mName, mPassword, mRePassword;
@@ -103,14 +101,14 @@ public class RegisterActivity extends AppCompatActivity {
                                     .setDisplayName(mName.getText().toString()).build();
                             mFirebaseAuth.getCurrentUser().updateProfile(profileUpdates);
 
-                            User user = new User();
-                            user.setId(userId);
+                            currentUser = new User();
+                            currentUser.setId(userId);
 
-                            user.setEmail(mEmail.getText().toString());
-                            user.setName(mName.getText().toString());
-                            user.setPassword(mPassword.getText().toString());
+                            currentUser.setEmail(mEmail.getText().toString());
+                            currentUser.setName(mName.getText().toString());
+                            currentUser.setPassword(mPassword.getText().toString());
 
-                            users.add(user).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            users.add(currentUser).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                 @Override
                                 public void onSuccess(DocumentReference documentReference) {
 

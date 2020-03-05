@@ -3,6 +3,7 @@ package com.example.halward.homePage;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -48,6 +49,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
+import static com.example.halward.login.LoginActivity.currentUser;
 
 
 /**
@@ -91,6 +93,13 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mFirebaseAuth = FirebaseAuth.getInstance();
         user = mFirebaseAuth.getCurrentUser();
         userName = user.getDisplayName();
+
+        if (user.getPhotoUrl() == null){
+            currentUser.setPhoto("/Users/serhiimelnyk/material-components-android-codelabs/java/Halward/app/src/main/res/drawable/images.png");
+        }else{
+            currentUser.setPhoto(user.getPhotoUrl().toString());
+        }
+        currentUser.setName(user.getDisplayName());
 
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
@@ -163,7 +172,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                         mRecyclerView.scrollToPosition(position);
                     }
                 });
-
                 snackbar.setActionTextColor(Color.YELLOW);
                 snackbar.show();
             }

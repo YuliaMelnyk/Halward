@@ -19,7 +19,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.halward.SplashActivity;
-import com.example.halward.homePage.HomeActivity;
 import com.example.halward.R;
 import com.example.halward.ValidateUser;
 import com.example.halward.model.User;
@@ -29,7 +28,6 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -61,7 +59,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private Button mLoginBtn;
     private TextView mSignUp, mForgotPassword;
 
-
+    public static User currentUser;
     private ValidateUser mValidateUser;
 
     ProgressDialog ringProgressDialog;
@@ -99,7 +97,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private LoginButton facebookButton;
 
     public String personName, gmail;
-    public Uri gPhoto;
+    public static Uri gPhoto;
     private String idToken;
 
 
@@ -107,8 +105,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-         //db = FirebaseFirestore.getInstance();
+        currentUser = new User();
+        //db = FirebaseFirestore.getInstance();
 
         mFacebook = (ImageView) findViewById(R.id.login_face);
         facebookButton = (LoginButton) findViewById(R.id.btn_fb_login);
@@ -291,6 +289,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             personName = account.getDisplayName();
             gmail = account.getEmail();
             gPhoto = account.getPhotoUrl();
+
 
             // you can store user data to SharedPreference
             AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
