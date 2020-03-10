@@ -1,26 +1,21 @@
 package com.example.halward.calendarPage;
 
 
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 
+import com.example.halward.CommonAdapter;
 import com.example.halward.R;
-import com.example.halward.homePage.HomeAdapter;
-import com.example.halward.login.LoginActivity;
 import com.example.halward.model.Habit;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -32,17 +27,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,7 +40,7 @@ public class CalendarFragment extends Fragment implements SwipeRefreshLayout.OnR
     private List<Habit> mHabits;
     private List<Date> habitsToday;
     private RecyclerView mRecyclerView;
-    private CalendarAdapter mCalendarAdapter;
+    private CommonAdapter mCommonAdapter;
     CalendarView mCalendarView;
     View view;
     String selectedDate;
@@ -111,40 +99,15 @@ public class CalendarFragment extends Fragment implements SwipeRefreshLayout.OnR
                         // mRecyclerView.setHasFixedSize(true);
 
                         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                        mCalendarAdapter = new CalendarAdapter(mHabits, getContext());
-                        mRecyclerView.setAdapter(mCalendarAdapter);
-                        mCalendarAdapter.notifyDataSetChanged();
+                        mCommonAdapter = new CommonAdapter(getContext(),mHabits,  R.layout.fragment_habit_today);
+                        mRecyclerView.setAdapter(mCommonAdapter);
+                        mCommonAdapter.notifyDataSetChanged();
                     }
                 });
             }
         });
         return view;
     }
-
-/*
-    private void fillHabits() {
-
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        CollectionReference collectionReference = db.collection("habits");
-
-        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    mHabits = new ArrayList<>();
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Habit habit = document.toObject(Habit.class);
-                        mHabits.add(habit);
-                    }
-                    //mHomeAdapter.notifyDataSetChanged();
-
-                } else {
-                    Log.w(TAG, "Failed to read value.");
-                }
-            }
-        });
-    }*/
 
     @Override
     public void onRefresh() {

@@ -253,7 +253,6 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-
     <Button
         android:id="@+id/add_button"
         android:layout_width="160dp"
@@ -273,15 +272,14 @@
         android:id="@+id/view_progressBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#80000000"
         android:visibility="invisible">
 
 
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyle"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:layout_gravity="center"
             android:indeterminate="true"
             android:indeterminateTint="@color/colorPrimary"

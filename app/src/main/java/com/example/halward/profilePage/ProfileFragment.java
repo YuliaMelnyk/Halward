@@ -2,7 +2,6 @@ package com.example.halward.profilePage;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,7 +21,6 @@ import com.example.halward.R;
 import com.example.halward.databinding.FragmentProfileBinding;
 import com.example.halward.homePage.HomeActivity;
 import com.example.halward.login.LoginActivity;
-import com.example.halward.viewModels.UserViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -37,7 +36,7 @@ public class ProfileFragment extends Fragment {
 
     private MyClickHandlers handlers;
     private View view;
-    private Button mButton;
+    private TextView mLogout;
     private ImageButton mImageButton;
     private ImageView mImageView;
 
@@ -63,7 +62,9 @@ public class ProfileFragment extends Fragment {
 
         handlers = new MyClickHandlers(getContext());
 
-        mButton = (Button) view.findViewById(R.id.button2);
+        mLogout = (TextView) view.findViewById(R.id.logout);
+
+/*
         mImageButton = (ImageButton) view.findViewById(R.id.back_home);
 
         mImageButton.setOnClickListener(new View.OnClickListener() {
@@ -75,8 +76,9 @@ public class ProfileFragment extends Fragment {
                 getActivity().startActivity(intent);
             }
         });
+*/
 
-        mButton.setOnClickListener(new View.OnClickListener() {
+        mLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut(); // logout

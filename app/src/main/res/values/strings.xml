@@ -44,4 +44,7 @@
     <string name="on_days">On days</string>
     <string name="add_photo">Choose photo</string>
     <string name="calendar">Calendar</string>
+    <string name="in_proces">In progress</string>
+    <string name="terminate">Terminated</string>
+    <string name="logout">Logout</string>
 </resources>

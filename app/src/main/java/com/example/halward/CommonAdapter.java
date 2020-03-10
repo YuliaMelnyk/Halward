@@ -1,4 +1,4 @@
-package com.example.halward.calendarPage;
+package com.example.halward;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.halward.R;
 import com.example.halward.addActivity.AddHabitActivity;
-import com.example.halward.homePage.HomeAdapter;
 import com.example.halward.model.Habit;
 import com.squareup.picasso.Picasso;
 
@@ -24,14 +23,16 @@ import java.util.List;
  * @author yuliiamelnyk on 2020-02-18
  * @project Halward
  */
-public class CalendarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class CommonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Habit> mHabits;
     private Context mContext;
+    private int resourse;
 
-    public CalendarAdapter(List<Habit> mhabits, Context mContext) {
+    public CommonAdapter(Context mContext,List<Habit> mhabits,  int resourse) {
         this.mContext = mContext;
         this.mHabits = mhabits;
+        this.resourse = resourse;
     }
 
     @NonNull
@@ -39,7 +40,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         LayoutInflater mInflater = LayoutInflater.from(parent.getContext());
-        view = mInflater.inflate(R.layout.fragment_habit_today, parent, false);
+        view = mInflater.inflate(resourse, parent, false);
         RecyclerView.ViewHolder holder = new ViewHolder(view);
 
         return holder;
@@ -48,16 +49,15 @@ public class CalendarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
-        if (holder instanceof CalendarAdapter.ViewHolder) {
-            ((CalendarAdapter.ViewHolder) holder).cardText.setText(mHabits.get(position).getName());
-            ((CalendarAdapter.ViewHolder) holder).textDuration.setText(String.valueOf(mHabits.get(position).getDuration())+" days");
-            Picasso.get().load(mHabits.get(position).getImage()).into(((CalendarAdapter.ViewHolder) holder).cardImage);
+        if (holder instanceof ViewHolder) {
+            ((ViewHolder) holder).cardText.setText(mHabits.get(position).getName());
+            ((ViewHolder) holder).textDuration.setText(String.valueOf(mHabits.get(position).getDuration())+" days");
+            Picasso.get().load(mHabits.get(position).getImage()).into(((ViewHolder) holder).cardImage);
             //((ViewHolder) holder).cardImage.setImageURI(load);
-            ((CalendarAdapter.ViewHolder) holder).cv.setOnClickListener(new View.OnClickListener() {
+            ((ViewHolder) holder).cv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     view.getContext().startActivity(new Intent(view.getContext(), AddHabitActivity.class));
-
                 }
             });
         }
@@ -68,6 +68,25 @@ public class CalendarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return mHabits.size();
     }
 
+    public void removeItem(int position){
+        mHabits.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(Habit habit, int position){
+        mHabits.add(position, habit);
+        notifyItemInserted(position);
+    }
+
+    public List<Habit> getData(){
+        return mHabits;
+    }
+    @Override
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        //mHabitFragment = (HomeFragment) mContext;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView cardImage;
@@ -75,9 +94,6 @@ public class CalendarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView textDuration;
         CardView cv;
 
-       /* public ViewHolder(LayoutInflater inflater, ViewGroup parent) {
-            super(inflater.inflate(R.layout.fragment_habit, parent, false));
-        }*/
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -85,12 +101,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             cardText = (TextView) itemView.findViewById(R.id.title_text_cal);
             textDuration = (TextView) itemView.findViewById(R.id.sub_text_cal);
             cv = (CardView) itemView.findViewById(R.id.card_habits_calendar);
-            /*cv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    view.getContext().startActivity(new Intent(view.getContext(), AddHabitActivity.class));
-                }
-            });*/
+
         }
     }
 }
