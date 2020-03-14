@@ -14,13 +14,18 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
+import com.example.halward.InitCollapsing;
 import com.example.halward.R;
 import com.example.halward.databinding.FragmentProfileBinding;
 import com.example.halward.homePage.HomeActivity;
 import com.example.halward.login.LoginActivity;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -32,7 +37,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  * @author yuliiamelnyk on 2020-02-10
  * @project Halward
  */
-public class ProfileFragment extends Fragment {
+public class ProfileFragment extends Fragment implements InitCollapsing {
 
     private MyClickHandlers handlers;
     private View view;
@@ -54,6 +59,7 @@ public class ProfileFragment extends Fragment {
         FragmentProfileBinding binding = DataBindingUtil.inflate(inflater,
                 R.layout.fragment_profile, container, false);
 
+
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
 
@@ -63,6 +69,13 @@ public class ProfileFragment extends Fragment {
         handlers = new MyClickHandlers(getContext());
 
         mLogout = (TextView) view.findViewById(R.id.logout);
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar_profile);
+            ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+
+            initCollapsingToolbar();
+        }
 
 /*
         mImageButton = (ImageButton) view.findViewById(R.id.back_home);
@@ -78,7 +91,7 @@ public class ProfileFragment extends Fragment {
         });
 */
 
-        mLogout.setOnClickListener(new View.OnClickListener() {
+/*        mLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut(); // logout
@@ -87,10 +100,39 @@ public class ProfileFragment extends Fragment {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 getActivity().startActivity(intent);
             }
-        });
+        });*/
 
         return view;
     }
+
+    @Override
+    public void initCollapsingToolbar() {
+        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_profile_toolbar);
+        collapsingToolbarLayout.setTitle("");
+        AppBarLayout appBarLayout = (AppBarLayout) view.findViewById(R.id.app_profile_bar);
+        appBarLayout.setExpanded(true);
+
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    collapsingToolbarLayout.setTitle(mFirebaseUser.getDisplayName());
+                    isShow = true;
+                } else if (isShow) {
+                    collapsingToolbarLayout.setTitle("");
+                    isShow = false;
+                }
+            }
+        });
+    }
+
     public class MyClickHandlers {
 
         Context context;

@@ -20,53 +20,79 @@
     tools:context=".profilePage.ProfileFragment">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar"
+        android:id="@+id/app_profile_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar"
+            android:id="@+id/collapsing_profile_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="226.5dp"
+            android:layout_height="220dp"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:statusBarScrim="@android:color/transparent">
 
-            <FrameLayout
-                android:id="@+id/view_container"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fitsSystemWindows="true"
-                app:layout_collapseMode="parallax">
-                
-            </FrameLayout>
+                android:layout_height="200dp"
+                android:background="@color/colorPrimary"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/card_margin"
+                android:paddingTop="@dimen/card_margin">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:gravity="top"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+                <RelativeLayout
+                    android:layout_width="@dimen/profile_image"
+                    android:layout_height="@dimen/profile_image"
+                    android:layout_marginTop="39dp"
+                    android:layout_gravity="center">
+
+                    <ImageView
+                        android:id="@+id/profile_image"
+                        android:layout_width="@dimen/profile_image"
+                        android:layout_height="@dimen/profile_image"
+                        android:layout_centerHorizontal="true"
+                        bind:imageUrl="@{user.photo}" />
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:src="@drawable/nav_add"
+                        app:fabCustomSize="@dimen/fab_profile" />
+
+                </RelativeLayout>
 
                 <TextView
-                    android:id="@+id/toolbar_title"
-                    style="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:gravity="center_vertical"/>
-            </androidx.appcompat.widget.Toolbar>
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dimen_8dp"
+                    android:fontFamily="sans-serif"
+                    android:letterSpacing="0.1"
+                    android:text="@{user.name}"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/profile_name"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+<include layout="@layout/toolbar_profile"/>
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/tab_height"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_alignParentBottom="true"
                 android:layout_gravity="bottom"
-                app:tabGravity="center"
-                app:tabMode="fixed"/>
+                app:tabGravity="fill"
+                app:tabMode="fixed"
+                android:minHeight="?android:attr/actionBarSize"
+
+
+                app:tabContentStart="72dp"/>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -76,10 +102,16 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-    <include
-        android:id="@+id/content_user"
-        layout="@layout/content_profile"
-        bind:user="@{user}" />
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <include layout="@layout/content_habit_home" />
+
+    </androidx.core.widget.NestedScrollView>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
+import com.example.halward.InitCollapsing;
 import com.example.halward.R;
 import com.example.halward.SwipeToDeleteCallback;
 import com.example.halward.model.Habit;
@@ -47,7 +48,7 @@ import static com.example.halward.login.LoginActivity.currentUser;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, InitCollapsing {
 
     private ArrayList<Habit> mHabits;
     private RecyclerView mRecyclerView;
@@ -172,32 +173,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
 
-    public void initCollapsingToolbar() {
-        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
-        collapsingToolbarLayout.setTitle(" ");
-        AppBarLayout appBarLayout = (AppBarLayout) view.findViewById(R.id.appbar);
-        appBarLayout.setExpanded(true);
-
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-
-            boolean isShow = false;
-            int scrollRange = -1;
-
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.getTotalScrollRange();
-                }
-                if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbarLayout.setTitle(getString(R.string.app_name));
-                    isShow = true;
-                } else if (isShow) {
-                    collapsingToolbarLayout.setTitle(" ");
-                    isShow = false;
-                }
-            }
-        });
-    }
 
     // takes habits from Firebase and fill them in the Home PAge
 
@@ -235,5 +210,33 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public void onDetach() {
         super.onDetach();
         mContext = null;
+    }
+
+    @Override
+    public void initCollapsingToolbar() {
+        final CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) view.findViewById(R.id.collapsing_toolbar);
+        collapsingToolbarLayout.setTitle(" ");
+        AppBarLayout appBarLayout = (AppBarLayout) view.findViewById(R.id.appbar);
+        appBarLayout.setExpanded(true);
+
+        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
+
+            boolean isShow = false;
+            int scrollRange = -1;
+
+            @Override
+            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
+                if (scrollRange == -1) {
+                    scrollRange = appBarLayout.getTotalScrollRange();
+                }
+                if (scrollRange + verticalOffset == 0) {
+                    collapsingToolbarLayout.setTitle(getString(R.string.app_name));
+                    isShow = true;
+                } else if (isShow) {
+                    collapsingToolbarLayout.setTitle(" ");
+                    isShow = false;
+                }
+            }
+        });
     }
 }
