@@ -4,16 +4,16 @@ import com.google.firebase.firestore.DocumentId;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.UUID;
 
 public class Habit implements Serializable, Comparable<Habit> {
     private String name;
     private String description;
     private int duration;
+    private boolean isActive;
     private String image;
     private String key;
     @DocumentId
-    private String documentName;//
+    private String documentName; //save document name directly in FireBase
     private Date startDate;
     private Date endDate;
 
@@ -38,6 +38,13 @@ public class Habit implements Serializable, Comparable<Habit> {
         return 0;
     }
 
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
 
     public String getName() {
         return name;

@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
 
-import com.example.halward.CommonAdapter;
 import com.example.halward.R;
 import com.example.halward.model.Habit;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -40,7 +39,7 @@ public class CalendarFragment extends Fragment implements SwipeRefreshLayout.OnR
     private List<Habit> mHabits;
     private List<Date> habitsToday;
     private RecyclerView mRecyclerView;
-    private CommonAdapter mCommonAdapter;
+    private CalendarAdapter mCalendarAdapter;
     CalendarView mCalendarView;
     View view;
     String selectedDate;
@@ -99,9 +98,9 @@ public class CalendarFragment extends Fragment implements SwipeRefreshLayout.OnR
                         // mRecyclerView.setHasFixedSize(true);
 
                         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                        mCommonAdapter = new CommonAdapter(getContext(),mHabits,  R.layout.fragment_habit_today);
-                        mRecyclerView.setAdapter(mCommonAdapter);
-                        mCommonAdapter.notifyDataSetChanged();
+                        mCalendarAdapter = new CalendarAdapter(getContext(),mHabits,  R.layout.fragment_habit_today);
+                        mRecyclerView.setAdapter(mCalendarAdapter);
+                        mCalendarAdapter.notifyDataSetChanged();
                     }
                 });
             }

@@ -45,6 +45,9 @@
     <string name="add_photo">Choose photo</string>
     <string name="calendar">Calendar</string>
     <string name="in_proces">In progress</string>
-    <string name="terminate">Terminated</string>
+    <string name="terminate">Terminate</string>
+    <string name="activate">Activate</string>
     <string name="logout">Logout</string>
+    <string name="dialog_title">Starting your Activity</string>
+    <string name="startDay">Start day</string>
 </resources>

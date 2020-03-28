@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
+import com.example.halward.CommonAdapter;
 import com.example.halward.InitCollapsing;
 import com.example.halward.R;
 import com.example.halward.SwipeToDeleteCallback;
@@ -40,6 +41,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import static android.content.ContentValues.TAG;
 import static com.example.halward.login.LoginActivity.currentUser;
@@ -52,7 +54,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private ArrayList<Habit> mHabits;
     private RecyclerView mRecyclerView;
-    private HomeAdapter mHomeAdapter;
+    private CommonAdapter mCommonAdapter;
     private View view;
     private TextView mHelloText;
     private Habit item;
@@ -118,16 +120,20 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 mHabits = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Habit habit = document.toObject(Habit.class);
-                    mHabits.add(habit);
+                    if (new Date().after(habit.getEndDate())){
+                        habit.setActive(false);
+                    } else if (habit.isActive()){
+                        mHabits.add(habit);
+                    }
                 }
 
                 mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
                 mCoordinatorLayout = view.findViewById(R.id.home_habit);
                 // mRecyclerView.setHasFixedSize(true);
                 mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                mHomeAdapter = new HomeAdapter(getContext(), mHabits);
-                mRecyclerView.setAdapter(mHomeAdapter);
-                mHomeAdapter.notifyDataSetChanged();
+                mCommonAdapter = new CommonAdapter(getContext(), mHabits);
+                mRecyclerView.setAdapter(mCommonAdapter);
+                mCommonAdapter.notifyDataSetChanged();
 
                 enableSwipeToDeleteAndUndo();
             }
@@ -143,10 +149,9 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
-
                 final int position = viewHolder.getAdapterPosition();
-                item = mHomeAdapter.getData().get(position);
-                mHomeAdapter.removeItem(position);
+                item = mCommonAdapter.getData().get(position);
+                mCommonAdapter.removeItem(position);
 
                 // delete habit from Firebase
                 CollectionReference habits = db.collection("habits");
@@ -160,7 +165,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     @Override
                     public void onClick(View view) {
 
-                        mHomeAdapter.restoreItem(item, position);
+                        mCommonAdapter.restoreItem(item, position);
                         mRecyclerView.scrollToPosition(position);
                     }
                 });
@@ -171,8 +176,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
         itemTouchhelper.attachToRecyclerView(mRecyclerView);
     }
-
-
 
     // takes habits from Firebase and fill them in the Home PAge
 
@@ -192,7 +195,6 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                         mHabits.add(habit);
                     }
                     //mHomeAdapter.notifyDataSetChanged();
-
                 } else {
                     Log.w(TAG, "Failed to read value.");
                 }

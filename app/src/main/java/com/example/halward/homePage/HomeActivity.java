@@ -10,12 +10,12 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.halward.profilePage.ProfileActivity;
-import com.example.halward.profilePage.ProfileFragment;
 import com.example.halward.ProgressFragment;
 import com.example.halward.R;
 import com.example.halward.addActivity.AddHabitActivity;
 import com.example.halward.addActivity.AddHabitFragment;
 import com.example.halward.calendarPage.CalendarFragment;
+import com.example.halward.profilePage.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 

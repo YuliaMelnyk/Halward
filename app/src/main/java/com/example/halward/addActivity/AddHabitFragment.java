@@ -203,6 +203,7 @@ public class AddHabitFragment extends Fragment {
                 final String descHabit = mDescription.getText().toString();
                 final String durTime = mDuration.getText().toString();
 
+
                 if (imageUri != null) {
                 mView.setVisibility(View.VISIBLE);
                 progressBar.setProgress(0);
@@ -242,6 +243,7 @@ public class AddHabitFragment extends Fragment {
                             habit.setStartDate(new Date());
                             habit.setDuration(Integer.parseInt(durTime));
                             habit.setImage(habitImage);
+                            habit.setActive(true);
 
                             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
                             //Getting current date
@@ -294,6 +296,7 @@ public class AddHabitFragment extends Fragment {
                        habit.setDescription(descHabit);
                        habit.setStartDate(new Date());
                        habit.setDuration(Integer.parseInt(durTime));
+                       habit.setActive(true);
                        habit.setImage("https://firebasestorage.googleapis.com/v0/b/halward-2932c.appspot.com/o/default.png?alt=media&token=a71f5ff6-01e5-4574-bc32-726fa8f65bd1");
 
                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");

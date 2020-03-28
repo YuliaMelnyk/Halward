@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/dialog_fragment"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="50dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/startDay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="15dp"
+        android:text="@string/startDay"
+        android:textSize="@dimen/text_size" />
+
+    <EditText
+        android:id="@+id/startDateDialog"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_toEndOf="@+id/startDay"
+        android:inputType="date" />
+
+    <TextView
+        android:id="@+id/durationTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/startDay"
+        android:layout_marginTop="40dp"
+        android:text="@string/duration_label"
+        android:textSize="@dimen/text_size"
+        />
+
+    <EditText
+        android:id="@+id/durationET"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/startDateDialog"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/durationTV"
+        android:inputType="number" />
+
+
+</RelativeLayout>

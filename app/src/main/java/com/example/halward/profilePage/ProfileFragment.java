@@ -98,7 +98,6 @@ public class ProfileFragment extends Fragment {
 
 /*
         mImageButton = (ImageButton) view.findViewById(R.id.back_home);
-
         mImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
