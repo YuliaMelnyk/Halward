@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "923522637990",
+    "firebase_url": "https://halward-2932c.firebaseio.com",
+    "project_id": "halward-2932c",
+    "storage_bucket": "halward-2932c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:923522637990:android:15fad2048ca5c4840a1467",
+        "android_client_info": {
+          "package_name": "com.example.halward"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "923522637990-fru3n7e1l6ikm0n5h4vt87a54fr9r07s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.halward",
+            "certificate_hash": "ad99f6a2f1576c9fc0e2cebb2357e9ba0dedcbfa"
+          }
+        },
+        {
+          "client_id": "923522637990-m36iq1rfhprk48iekf1h554is9rbeck4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYq4NHkH7iBnPJjIaKlTpjUB0XhyXBtRg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "923522637990-s36dgvigphrcfp0cj1fg7ofbt3lgknkt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
