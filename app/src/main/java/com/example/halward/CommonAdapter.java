@@ -1,9 +1,11 @@
 package com.example.halward;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,12 +17,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.halward.model.Habit;
 import com.squareup.picasso.Picasso;
 
+import java.util.Date;
 import java.util.List;
 
 public class CommonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
     private List<Habit> mHabits;
     private Context mContext;
     private ItemClickListener mClickListener;
+    private Habit mHabit;
+    private Dialog mDialog;
 
     public CommonAdapter(Context context, List<Habit> habits) {
         mContext = context;
@@ -34,7 +39,16 @@ public class CommonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         View view;
         LayoutInflater mInflater = LayoutInflater.from(parent.getContext());
         view = mInflater.inflate(R.layout.fragment_habit, parent, false);
-        RecyclerView.ViewHolder holder = new ViewHolder(view);
+        final RecyclerView.ViewHolder holder = new ViewHolder(view);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mClickListener != null) {
+                    mClickListener.onItemClick(view, holder.getAdapterPosition());
+                }
+            }
+        });
 
         return holder;
     }
@@ -47,12 +61,17 @@ public class CommonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ((ViewHolder) holder).textDuration.setText(String.valueOf(mHabits.get(position).getDuration()) + " days");
             Picasso.get().load(mHabits.get(position).getImage()).into(((ViewHolder) holder).cardImage);
             //((ViewHolder) holder).cardImage.setImageURI(load);
+
         }
     }
 
     @Override
     public int getItemCount() {
         return mHabits.size();
+    }
+
+    public void setRecyclerViewOnClickListenerHack(ItemClickListener r){
+        mClickListener = r;
     }
 
     public void removeItem(int position) {
@@ -65,6 +84,15 @@ public class CommonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         notifyItemInserted(position);
     }
 
+    public void setItemActive( int duration, boolean isActive){
+        mHabit.setActive(isActive);
+        mHabit.setStartDate(new Date());
+        mHabit.setDuration(duration);
+    }
+    public void setItemInactive( boolean isActive){
+        mHabit.setActive(isActive);
+        mHabit.setEndDate(new Date(System.currentTimeMillis()-24*60*60*1000));
+    }
     public List<Habit> getData() {
         return mHabits;
     }
@@ -89,14 +117,14 @@ public class CommonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             cardText = (TextView) itemView.findViewById(R.id.title_text);
             textDuration = (TextView) itemView.findViewById(R.id.sub_text);
             cv = (CardView) itemView.findViewById(R.id.card_habits);
-            cv.setOnClickListener(new View.OnClickListener() {
+/*            cv.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (mClickListener != null) {
                         mClickListener.onItemClick(view, getAdapterPosition());
                     }
                 }
-            });
+            });*/
         }
 
         @Override

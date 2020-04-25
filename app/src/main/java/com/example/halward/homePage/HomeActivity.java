@@ -84,7 +84,7 @@ public class HomeActivity extends AppCompatActivity {
                     return true;
                 case R.id.nav_profile:
                     Intent myIntent2 = new Intent(HomeActivity.this, ProfileActivity.class);
-                    myIntent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    //myIntent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(myIntent2);
                 default:
                     break;

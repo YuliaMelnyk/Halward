@@ -12,7 +12,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="320dp"
         android:background="@color/colorTransparent"
         android:fitsSystemWindows="true"
         android:scaleType="centerCrop"
@@ -46,24 +46,27 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="35dp"
                     android:gravity="center_horizontal"
                     android:orientation="vertical">
-                    
+
                     <TextView
                         android:id="@+id/hello"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/colorPrimaryDark"
-                        android:textSize="30dp"/>
+                        android:textSize="30dp" />
 
                     <TextView
                         android:id="@+id/quote_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/colorPrimaryDark"
+                        android:layout_marginRight="10dp"
                         android:text="@string/quote"
-                        android:textSize="24sp" />
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textDirection="rtl"
+                        android:textSize="22sp" />
                 </LinearLayout>
             </RelativeLayout>
 

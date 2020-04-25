@@ -19,7 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".SplashActivity"></activity>
+        <activity android:name=".TimerHabitActivity"></activity>
+        <activity android:name=".SplashActivity" />
         <activity android:name=".homePage.HomeActivity" />
         <activity android:name=".addActivity.AddHabitActivity" />
         <activity android:name=".ProgressActivity" />
