@@ -104,7 +104,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }
 
         try {
-            Glide.with(this).load(R.drawable.cover_1_1).into((ImageView) view.findViewById(R.id.backdrop));
+            Glide.with(this).load(R.drawable.caver_11).into((ImageView) view.findViewById(R.id.backdrop));
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bumptech.glide.Glide;
 import com.example.halward.HabitDialog;
 import com.example.halward.InitCollapsing;
 import com.example.halward.R;
@@ -76,6 +77,11 @@ public class ProfileActivity extends AppCompatActivity implements CommonAdapter.
             setSupportActionBar(toolbar);
 
             initCollapsingToolbar();
+            try {
+                Glide.with(this).load(R.drawable.caver_21).into((ImageView) findViewById(R.id.backdrop_1));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             toolbar.inflateMenu(R.menu.menu_profile);
             Menu menu = toolbar.getMenu();

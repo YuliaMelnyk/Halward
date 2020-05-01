@@ -2,19 +2,19 @@ package com.example.halward;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.halward.model.Habit;
+import com.example.halward.timer.TimerHabitActivity;
 import com.squareup.picasso.Picasso;
 
 import java.util.Date;
@@ -44,9 +44,8 @@ public class CommonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mClickListener != null) {
-                    mClickListener.onItemClick(view, holder.getAdapterPosition());
-                }
+                Intent intent = new Intent(mContext, TimerHabitActivity.class);
+                mContext.startActivity(intent);
             }
         });
 

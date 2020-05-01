@@ -145,35 +145,35 @@ public class AddHabitFragment extends Fragment {
         mMonday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mMonday.setBackgroundResource(R.drawable.monday_orange);
+                mMonday.setBackgroundResource(R.drawable.monday);
             }
         });
         mTuesday = (ImageButton) view.findViewById(R.id.tuesday);
         mTuesday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mTuesday.setBackgroundResource(R.drawable.tuesday_orange);
+                mTuesday.setBackgroundResource(R.drawable.tuesday);
             }
         });
         mWednesday = (ImageButton) view.findViewById(R.id.wednesday);
         mWednesday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mWednesday.setBackgroundResource(R.drawable.wednesday_orange);
+                mWednesday.setBackgroundResource(R.drawable.wensday);
             }
         });
         mThursday = (ImageButton) view.findViewById(R.id.thursday);
         mThursday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mThursday.setBackgroundResource(R.drawable.tuesday_orange);
+                mThursday.setBackgroundResource(R.drawable.tuesday);
             }
         });
         mFriday = (ImageButton) view.findViewById(R.id.friday);
         mFriday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mFriday.setBackgroundResource(R.drawable.friday_orange);
+                mFriday.setBackgroundResource(R.drawable.friday);
             }
         });
 
@@ -181,14 +181,14 @@ public class AddHabitFragment extends Fragment {
         mSaturday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mSaturday.setBackgroundResource(R.drawable.saturday_orange);
+                mSaturday.setBackgroundResource(R.drawable.saturday);
             }
         });
         mSunday = (ImageButton) view.findViewById(R.id.sunday);
         mSunday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mSunday.setBackgroundResource(R.drawable.saturday_orange);
+                mSunday.setBackgroundResource(R.drawable.saturday);
             }
         });
 

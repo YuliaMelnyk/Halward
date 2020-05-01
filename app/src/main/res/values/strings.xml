@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">Halward</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="member_label">Not a member yet? </string>
+    <string name="signup_label"> <u>Sign up!</u> </string>
+    <string name="login">SIGN IN</string>
+    <string name="register">SIGN UP</string>
+    <string name="password">Password</string>
+    <string name="e_mail">Email</string>
+    <string name="tag">Halward</string>
+    <string name="label_one">Forgot password?</string>
+    <string name="label_two">Sign in with</string>
+    <string name="logo">H</string>
+    <string name="re_type_password">Repeat Password</string>
+    <string name="your_name">User name</string>
+    <string name="sign_up_with">Sign up with</string>
+    <string name="plus_sign_out">Change Google+ account</string>
+    <string name="plus_disconnect">Disconnect from Google+</string>
+    <string name="error_invalid_email">Invalid Email</string>
+    <string name="error_invalid_password">The password is too short</string>
+    <string name="error_incorrect_password">Email or password incorrect</string>
+    <string name="error_repeat_password">Your password and confirmation password do not match </string>
+    <string name="error_field_required">Required</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="create_account">Register</string>
+
+    <string name="facebook_app_id">106930017424222</string>
+    <string name="fb_login_protocol_scheme">fb106930017424222</string>
+
+    <string name="habit_name"> Drink 8 glasses of water</string>
+    <string name="habit_days">21 days</string>
+    <string name="hint_task_title">Title</string>
+
+    <string name="quote">"It’s going to be hard, but hard does not mean impossible"</string>
+    <string name="SplashQuote">"Be better than yesterday."</string>
+    <string name="title_label">Title</string>
+    <string name="description_label">Description</string>
+    <string name="remind_label">Remind</string>
+    <string name="duration_label">Duration</string>
+    <string name="create_habbit">Create a habit</string>
+    <string name="days">days</string>
+    <string name="on_days">On days</string>
+    <string name="add_photo">Choose photo</string>
+    <string name="calendar">Calendar</string>
+    <string name="in_proces">In progress</string>
+    <string name="terminate">Terminate</string>
+    <string name="activate">Activate</string>
+    <string name="logout">Logout</string>
+    <string name="dialog_title">Starting your Activity</string>
+    <string name="startDay">Start day</string>
+    <string name="reset">reset</string>
+    <string name="stop">stop</string>
+    <string name="start">start</string>
+    <string name="done">Done</string>
+</resources>
