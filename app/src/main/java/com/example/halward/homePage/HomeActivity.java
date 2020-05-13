@@ -9,8 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.halward.Statistic.StatisticFragment;
 import com.example.halward.profilePage.ProfileActivity;
-import com.example.halward.ProgressFragment;
 import com.example.halward.R;
 import com.example.halward.addActivity.AddHabitActivity;
 import com.example.halward.addActivity.AddHabitFragment;
@@ -56,7 +56,7 @@ public class HomeActivity extends AppCompatActivity {
         mFragments.add(new HomeFragment());
         mFragments.add(new CalendarFragment());
         mFragments.add(new AddHabitFragment());
-        mFragments.add(new ProgressFragment());
+        mFragments.add(new StatisticFragment());
         mFragments.add(new ProfileFragment());
 
         setFragmentPosition(0);

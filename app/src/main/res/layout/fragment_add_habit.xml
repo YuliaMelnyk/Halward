@@ -140,21 +140,9 @@
             android:text="@string/days" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/add_on_days"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:paddingTop="3dp"
-        android:paddingRight="3dp"
-        android:text="@string/on_days"
-        android:textSize="@dimen/card_text_size"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linear_duration" />
 
     <LinearLayout
-        android:id="@+id/linear_on_days"
+        android:id="@+id/linear_tags_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
@@ -162,56 +150,62 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/add_on_days">
+        app:layout_constraintTop_toBottomOf="@+id/linear_duration">
 
 
-        <ImageButton
-            android:id="@+id/sunday"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/saturday_gray" />
+        <Button
+            android:id="@+id/work"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp" />
 
-        <ImageButton
-            android:id="@+id/monday"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/monday_gray" />
+        <Button
+            android:id="@+id/study"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp" />
 
-        <ImageButton
-            android:id="@+id/tuesday"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/tuesday_gray" />
+        <Button
+            android:id="@+id/health"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-        <ImageButton
-            android:id="@+id/wednesday"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/wednesday_gray" />
+            android:layout_marginRight="10dp" />
 
-        <ImageButton
-            android:id="@+id/thursday"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/tuesday_gray" />
 
-        <ImageButton
-            android:id="@+id/friday"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/friday_gray" />
 
-        <ImageButton
-            android:id="@+id/saturday"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:background="@drawable/saturday_gray" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linear_tags_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linear_tags_1">
+
+        <Button
+            android:id="@+id/body"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginRight="10dp" />
+
+        <Button
+            android:id="@+id/mind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginRight="10dp" />
+
+        <Button
+            android:id="@+id/other"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginRight="10dp" />
 
     </LinearLayout>
 
@@ -221,12 +215,12 @@
         android:layout_height="70dp"
         android:background="@color/nav_primary"
         android:orientation="horizontal"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="35dp"
         app:cardCornerRadius="@dimen/card_radius"
         app:layout_constraintBottom_toTopOf="@+id/add_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintTop_toBottomOf="@+id/linear_on_days"
+        app:layout_constraintTop_toBottomOf="@+id/linear_tags_2"
         app:layout_constraintVertical_bias="1.0">
         <FrameLayout
             android:id="@+id/view_progressBar"
@@ -264,7 +258,7 @@
         android:id="@+id/add_button"
         android:layout_width="160dp"
         android:layout_height="50dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="72dp"
         android:background="@drawable/create_button"
         android:fontFamily="sans-serif"
         android:text="@string/create_habbit"

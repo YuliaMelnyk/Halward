@@ -2,13 +2,17 @@ package com.example.halward.homePage;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -28,6 +32,8 @@ import com.example.halward.InitCollapsing;
 import com.example.halward.R;
 import com.example.halward.SwipeToDeleteCallback;
 import com.example.halward.model.Habit;
+import com.example.halward.model.User;
+import com.example.halward.timer.TimerHabitActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
@@ -50,7 +56,7 @@ import static com.example.halward.login.LoginActivity.currentUser;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, InitCollapsing {
+public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, InitCollapsing, CommonAdapter.ItemClickListener{
 
     private ArrayList<Habit> mHabits;
     private RecyclerView mRecyclerView;
@@ -67,7 +73,11 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private FirebaseUser user;
     private FirebaseAuth mFirebaseAuth;
     public static String userName;
+    public static User currentUser;
     private Context mContext;
+    private Spinner mSpinner;
+    private  Resources res;
+    private String[] tags;
 
 
     @Override
@@ -84,11 +94,12 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
         view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        currentUser = new User();
         mFirebaseAuth = FirebaseAuth.getInstance();
         user = mFirebaseAuth.getCurrentUser();
         userName = user.getDisplayName();
 
-        if (user.getPhotoUrl() == null){
+       if (user.getPhotoUrl() == null){
             currentUser.setPhoto("/Users/serhiimelnyk/material-components-android-codelabs/java/Halward/app/src/main/res/drawable/images.png");
         }else{
             currentUser.setPhoto(user.getPhotoUrl().toString());
@@ -111,6 +122,10 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mHelloText = (TextView) view.findViewById(R.id.hello);
         mHelloText.setText("Hello " + userName + "!");
 
+        res= getResources();
+        tags = res.getStringArray(R.array.tags);
+
+
         db = FirebaseFirestore.getInstance();
         collectionReference = db.collection("habits");
 
@@ -120,9 +135,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 mHabits = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Habit habit = document.toObject(Habit.class);
-                    if (new Date().after(habit.getEndDate())){
-                        habit.setActive(false);
-                    } else if (habit.isActive()){
+                    if (habit.isActive()){
                         mHabits.add(habit);
                     }
                 }
@@ -240,5 +253,12 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 }
             }
         });
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        Intent intent = new Intent(getActivity(), TimerHabitActivity.class);
+        intent.putExtra("position", position);
+        getActivity().startActivity(intent);
     }
 }

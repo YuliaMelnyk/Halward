@@ -41,26 +41,25 @@ public class CommonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         view = mInflater.inflate(R.layout.fragment_habit, parent, false);
         final RecyclerView.ViewHolder holder = new ViewHolder(view);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(mContext, TimerHabitActivity.class);
-                mContext.startActivity(intent);
-            }
-        });
-
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
 
         if (holder instanceof ViewHolder) {
             ((ViewHolder) holder).cardText.setText(mHabits.get(position).getName());
-            ((ViewHolder) holder).textDuration.setText(String.valueOf(mHabits.get(position).getDuration()) + " days");
+            ((ViewHolder) holder).tagText.setText(String.valueOf("#" +mHabits.get(position).getTag()));
             Picasso.get().load(mHabits.get(position).getImage()).into(((ViewHolder) holder).cardImage);
-            //((ViewHolder) holder).cardImage.setImageURI(load);
+            ((ViewHolder) holder).cv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(mContext, TimerHabitActivity.class);
+                    intent.putExtra("position", position);
+                    mContext.startActivity(intent);
+                }
 
+            });
         }
     }
 
@@ -105,8 +104,7 @@ public class CommonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView cardImage;
-        TextView cardText;
-        TextView textDuration;
+        TextView cardText, textDuration, tagText;
         CardView cv;
 
 
@@ -114,23 +112,14 @@ public class CommonAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             super(itemView);
             cardImage = (ImageView) itemView.findViewById(R.id.habit_image);
             cardText = (TextView) itemView.findViewById(R.id.title_text);
-            textDuration = (TextView) itemView.findViewById(R.id.sub_text);
+            tagText = (TextView) itemView.findViewById(R.id.tag_text);
             cv = (CardView) itemView.findViewById(R.id.card_habits);
-/*            cv.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (mClickListener != null) {
-                        mClickListener.onItemClick(view, getAdapterPosition());
-                    }
-                }
-            });*/
         }
 
         @Override
         public void onClick(View view) {
             if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
         }
-
     }
 
     // convenience method for getting data at click position

@@ -22,11 +22,11 @@ import com.bumptech.glide.Glide;
 import com.example.halward.HabitDialog;
 import com.example.halward.InitCollapsing;
 import com.example.halward.R;
-import com.example.halward.calendarPage.CalendarAdapter;
 import com.example.halward.databinding.ActivityProfileBinding;
 import com.example.halward.CommonAdapter;
 import com.example.halward.homePage.HomeActivity;
 import com.example.halward.model.Habit;
+import com.example.halward.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
@@ -48,8 +48,14 @@ import static com.example.halward.login.LoginActivity.currentUser;
  */
 public class ProfileActivity extends AppCompatActivity implements CommonAdapter.ItemClickListener, SwipeRefreshLayout.OnRefreshListener, InitCollapsing {
 
+    private MyClickHandlers handlers;
 
-    private FirebaseUser user;
+    private TextView mLogout;
+    private ImageButton mImageButton;
+    private ImageView mImageView;
+
+    private Menu collapsedMenu;
+    private FirebaseUser mFirebaseUser;
     private FirebaseAuth mFirebaseAuth;
     private CollectionReference collectionReference;
     private FirebaseFirestore db;
@@ -67,10 +73,17 @@ public class ProfileActivity extends AppCompatActivity implements CommonAdapter.
         ActivityProfileBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_profile);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
-        user = mFirebaseAuth.getCurrentUser();
-        userName = user.getDisplayName();
+        mFirebaseUser = mFirebaseAuth.getCurrentUser();
+        userName = mFirebaseUser.getDisplayName();
+
+        currentUser = new User();
+        currentUser.setName(userName);
+        currentUser.setName(mFirebaseUser.getDisplayName());
+        currentUser.setPhoto(mFirebaseUser.getPhotoUrl().toString());
 
         binding.setUser(currentUser);
+
+        handlers = new ProfileActivity.MyClickHandlers(mContext);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_profile);
@@ -109,12 +122,11 @@ public class ProfileActivity extends AppCompatActivity implements CommonAdapter.
                 }
                 mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_profile);
                 //mRecyclerView.setHasFixedSize(true);
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(ProfileActivity.this));
-                mProfileAdapter = new ProfileAdapter(ProfileActivity.this, mHabits, R.layout.cardview_habit_profile);
+                mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
+                mProfileAdapter = new ProfileAdapter(mContext, mHabits, R.layout.cardview_habit_profile);
                 mRecyclerView.setAdapter(mProfileAdapter);
                 mProfileAdapter.setClickListener(self);
                 mProfileAdapter.notifyDataSetChanged();
-
 
             }
         });
@@ -163,11 +175,10 @@ public class ProfileActivity extends AppCompatActivity implements CommonAdapter.
     public void onItemClick(View view, int position) {
         HabitDialog habitDialog = new HabitDialog(position);
         habitDialog.show(getSupportFragmentManager(), "Activate a habit");
-
     }
 
 
-/*    public class MyClickHandlers {
+   public class MyClickHandlers {
 
         Context context;
 
@@ -175,11 +186,11 @@ public class ProfileActivity extends AppCompatActivity implements CommonAdapter.
             this.context = context;
         }
 
-        *//**
-         * Demonstrating updating bind data
-         * profile image
-         * will be updated on Fab click
-         *//*
+       /**
+        * Demonstrating updating bind data
+        * profile image
+        * will be updated on Fab click
+        */
         public void onProfileFabClicked(View view) {
             currentUser.setName("Sir David Attenborough");
             //currentUser.setPhoto("https://api.androidhive.info/images/nature/david1.jpg");
@@ -192,7 +203,7 @@ public class ProfileActivity extends AppCompatActivity implements CommonAdapter.
         }
 
 
-    }*/
+    }
 
 
 }

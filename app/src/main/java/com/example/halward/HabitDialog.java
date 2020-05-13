@@ -50,13 +50,14 @@ public class HabitDialog extends AppCompatDialogFragment {
     private FirebaseAuth mFirebaseAuth;
     public static String userName;
 
-    public HabitDialog(int position){
+    public HabitDialog(int position) {
         this.position = position;
     }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-       AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogStyle);
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_habit, null);
 
@@ -98,12 +99,12 @@ public class HabitDialog extends AppCompatDialogFragment {
                 .setPositiveButton(R.string.activate, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        if (mEditTextDuration.getText().equals("") || mEditTextDuration.getText().equals(null)){
+                        if (mEditTextDuration.getText().equals("") || mEditTextDuration.getText().equals(null)) {
                             duration = 0;
                         } else {
                             duration = (Integer.parseInt(mEditTextDuration.getText().toString()));
                         }
-                        clickedActivate(position,duration);
+                        clickedActivate(position, duration);
 
                         Intent intent = new Intent(getActivity(), ProfileActivity.class);
                         startActivity(intent);
@@ -117,8 +118,8 @@ public class HabitDialog extends AppCompatDialogFragment {
 
     private void clickedTerminate(int position) {
 
-                item = mHabits.get(position);
-                // take habit from Firebase
+        item = mHabits.get(position);
+        // take habit from Firebase
 
         collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -126,11 +127,12 @@ public class HabitDialog extends AppCompatDialogFragment {
                 mHabits = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Habit habit = document.toObject(Habit.class);
-                    if (habit.getName().equals(item.getName())){
+                    if (habit.getName().equals(item.getName())) {
                         habit.setActive(false);
-                        habit.setEndDate(new Date(System.currentTimeMillis()-24*60*60*1000));
-                            document.getReference().update("active", false);
-
+                        habit.setDone(false);
+                        habit.setEndDate(new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000));
+                        document.getReference().update("active", false);
+                        document.getReference().update("done", false);
                     }
                 }
             }
@@ -149,8 +151,9 @@ public class HabitDialog extends AppCompatDialogFragment {
                 mHabits = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Habit habit = document.toObject(Habit.class);
-                    if (habit.getName().equals(item.getName())){
+                    if (habit.getName().equals(item.getName())) {
                         habit.setActive(true);
+                        habit.setDone(false);
                         habit.setStartDate(new Date());
                         habit.setDuration(duration);
 
@@ -161,7 +164,7 @@ public class HabitDialog extends AppCompatDialogFragment {
                         cal.add(Calendar.DAY_OF_MONTH, duration);
                         //Date after adding the days to the current date
                         String endDate = sdf.format(cal.getTime());
-                        Date date1= null;
+                        Date date1 = null;
                         try {
                             date1 = new SimpleDateFormat("yyyy/MM/dd").parse(endDate);
                         } catch (ParseException e) {

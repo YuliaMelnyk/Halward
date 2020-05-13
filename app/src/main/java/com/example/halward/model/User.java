@@ -1,7 +1,5 @@
 package com.example.halward.model;
 
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.widget.ImageView;
 
 import androidx.databinding.BaseObservable;
@@ -10,11 +8,12 @@ import androidx.databinding.BindingAdapter;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.firebase.database.IgnoreExtraProperties;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @IgnoreExtraProperties
@@ -25,6 +24,7 @@ public class User extends BaseObservable {
     private String password;
     private List<Habit> mHabits;
     private String mPhoto;
+    public static HashMap<Date, HabitsDone> sHabitsDone;
 
     public User() {
     }

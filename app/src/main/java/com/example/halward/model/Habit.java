@@ -4,6 +4,8 @@ import com.google.firebase.firestore.DocumentId;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.TreeMap;
 
 public class Habit implements Serializable, Comparable<Habit> {
     private String name;
@@ -18,13 +20,14 @@ public class Habit implements Serializable, Comparable<Habit> {
     private Date endDate;
     private  boolean isDone;
     private String tag;
+    private HashMap<String, Boolean> sHabitToday; // TreeMap for save
 
     public Habit() {
         key = Double.toString( Math.random());
         startDate = new Date();
         isDone = false;
+        isActive = true;
     }
-
 
     public Habit(String name, int duration, String image) {
         this.name = name;
@@ -127,5 +130,13 @@ public class Habit implements Serializable, Comparable<Habit> {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public HashMap<String, Boolean> getsHabitToday() {
+        return sHabitToday;
+    }
+
+    public void setsHabitToday(HashMap<String, Boolean> sHabitToday) {
+        this.sHabitToday = sHabitToday;
     }
 }

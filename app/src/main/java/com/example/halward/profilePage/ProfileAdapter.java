@@ -46,8 +46,6 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         view = mInflater.inflate(resourse, parent, false);
         ViewHolder holder = new ProfileAdapter.ViewHolder(view);
 
-
-
         return holder;
     }
 

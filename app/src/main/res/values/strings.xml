@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Halward</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="member_label">Not a member yet? </string>
     <string name="signup_label"> <u>Sign up!</u> </string>
@@ -54,4 +54,19 @@
     <string name="stop">stop</string>
     <string name="start">start</string>
     <string name="done">Done</string>
+    <string name="stat_text">Statistics</string>
+    <string name="percent_daily">50% achived for today.</string>
+    <string name="daily_progress">Daily progress</string>
+
+
+    <!--    array list for tags-->
+    <string-array name="tags">
+        <item>All</item>
+        <item>Health</item>
+        <item>Study</item>
+        <item>Work</item>
+        <item>Body</item>
+        <item>Mind</item>
+        <item>Other</item>
+    </string-array>
 </resources>

@@ -108,11 +108,9 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_below="@+id/progressbar_timerview"
-
         android:layout_marginStart="77dp"
         android:layout_marginTop="50dp"
         android:layout_marginEnd="-137dp"
-
         android:layout_toStartOf="@+id/button_timerview_start"
         android:background="@drawable/repeat"
         android:text="Stop !"

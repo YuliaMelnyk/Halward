@@ -13,4 +13,6 @@
     <color name="nav_clicked">#FFECE8</color>
     <color name="black">#000</color>
     <color name="text_timer">#5d5b6a</color>
+    <color name="progress">#faf4ff</color>
+    <color name="horiz_progress">#dbdbdb</color>
 </resources>
