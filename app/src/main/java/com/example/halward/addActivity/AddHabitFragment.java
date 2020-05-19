@@ -32,6 +32,7 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.example.halward.ConvertDataTypes;
 import com.example.halward.R;
 import com.example.halward.homePage.HomeActivity;
 import com.example.halward.model.Habit;
@@ -69,7 +70,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AddHabitFragment extends Fragment {
+public class AddHabitFragment extends Fragment implements ConvertDataTypes {
 
     Context mContext;
 
@@ -80,23 +81,19 @@ public class AddHabitFragment extends Fragment {
     private StorageReference mStorageRef;
     private FirebaseAuth auth;
 
-
     private Switch mSwitch;
     private Button mButton;
 
     private Button mStudy, mWork, mBody, mHealth, mMind, mOther;
 
     private ImageButton mPhoto;
-
-    private Bitmap image;
-
     private Habit mHabit;
 
     private static final int PICK_IMAGE = 100;
     private Uri imageUri;
     private String habitImage;
     private String tag = "Other";
-    HashMap<String, Boolean> mHashMap = new HashMap<>();
+    private HashMap<String, Boolean> mHashMap = new HashMap<>();
 
     FrameLayout mView;
 
@@ -155,7 +152,7 @@ public class AddHabitFragment extends Fragment {
         Resources res = getResources();
         String[] tags = res.getStringArray(R.array.tags);
 
-// click on Buttons to choose the tag
+        // Click on Buttons to choose the tag
         mBody = (Button) view.findViewById(R.id.body);
         mBody.setText(tags[4]);
 
@@ -239,7 +236,7 @@ public class AddHabitFragment extends Fragment {
             }
         });
 
-// save to FireBase
+        // Save to FireBase on click in Button
         mButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -253,6 +250,7 @@ public class AddHabitFragment extends Fragment {
 
                 if (imageUri != null) {
                     mView.setVisibility(View.VISIBLE);
+                    // Set progress Bar
                     progressBar.setProgress(0);
                     progressBar.setVisibility(View.VISIBLE);
                     putFile().addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -283,6 +281,7 @@ public class AddHabitFragment extends Fragment {
                             Uri downloadUrl = task.getResult();
                             habitImage = downloadUrl.toString();
 
+                            //Save fields to Class Habit
                             if (!TextUtils.isEmpty(titleName) && !TextUtils.isEmpty(descHabit) && !TextUtils.isEmpty(durTime) && !TextUtils.isEmpty(habitImage)) {
 
                                 Habit habit = new Habit();
@@ -314,9 +313,6 @@ public class AddHabitFragment extends Fragment {
 
                                 //formating Local Date
                                 LocalDate localDate = convertToLocalDateViaMilisecond(date);
-                                /*DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-YYYY");
-                                String formattedDate = localDate.format(DateTimeFormatter.ofPattern("dd-MM-YYYY"));
-                                localDate = LocalDate.parse(formattedDate);*/
 
                                 // formating Date
                                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -391,6 +387,8 @@ public class AddHabitFragment extends Fragment {
                             e.printStackTrace();
                         }
                         habit.setEndDate(date2);
+
+                        // Add HashMap with dates and done to Habit
                         Date date = habit.getStartDate();
 
                         LocalDate localDate = convertToLocalDateViaMilisecond(date);
@@ -404,6 +402,7 @@ public class AddHabitFragment extends Fragment {
                         }
                         mHabit.setsHabitToday(mHashMap);
 
+                        // Recording habit to FireBase
                         habits.add(habit).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
@@ -423,10 +422,10 @@ public class AddHabitFragment extends Fragment {
                 }
             }
         });
-
         return view;
     }
 
+    // Put image file in Habit
     private StorageTask<UploadTask.TaskSnapshot> putFile() {
         StorageReference ref = mStorageRef.child(System.currentTimeMillis() + "." + getExtenion(imageUri));
 
@@ -451,6 +450,7 @@ public class AddHabitFragment extends Fragment {
         return mimeTypeMap.getExtensionFromMimeType(cr.getType(uri));
     }
 
+    // Open Galery in Phone to pick the picture
     private void openGallery() {
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery, PICK_IMAGE);
@@ -465,6 +465,7 @@ public class AddHabitFragment extends Fragment {
         }
     }
 
+    //For hiding keyboard when user clicked in the screen
     public static void hideKeyboardFrom(Context context, View view) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -472,7 +473,7 @@ public class AddHabitFragment extends Fragment {
 
     // Convert java.time.LocalDate to java.util.Date
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static Date convertToDateViaInstant(LocalDate dateToConvert) {
+    public  Date convertToDateViaInstant(LocalDate dateToConvert) {
         return java.util.Date.from(dateToConvert.atStartOfDay()
                 .atZone(ZoneId.systemDefault())
                 .toInstant());
@@ -480,7 +481,7 @@ public class AddHabitFragment extends Fragment {
 
     // Converting java.util.Date to java.time.LocalDate
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public static LocalDate convertToLocalDateViaMilisecond(Date dateToConvert) {
+    public  LocalDate convertToLocalDateViaMilisecond(Date dateToConvert) {
         return Instant.ofEpochMilli(dateToConvert.getTime())
                 .atZone(ZoneId.systemDefault())
                 .toLocalDate();

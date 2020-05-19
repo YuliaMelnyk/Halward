@@ -55,10 +55,10 @@ public class CalendarFragment extends Fragment implements SwipeRefreshLayout.OnR
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_calendar, container, false);
 
@@ -80,6 +80,7 @@ public class CalendarFragment extends Fragment implements SwipeRefreshLayout.OnR
                 final Calendar cal = Calendar.getInstance();
                 cal.set(year, month, dayOfMonth);
 
+                // Get habits from FireBase and set depend of date.
                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                 CollectionReference collectionReference = db.collection("habits");
                 collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -96,7 +97,6 @@ public class CalendarFragment extends Fragment implements SwipeRefreshLayout.OnR
                         }
                         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_calendar);
                         // mRecyclerView.setHasFixedSize(true);
-
                         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
                         mCalendarAdapter = new CalendarAdapter(getContext(),mHabits,  R.layout.fragment_habit_today);
                         mRecyclerView.setAdapter(mCalendarAdapter);

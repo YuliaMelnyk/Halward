@@ -46,8 +46,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import static android.content.ContentValues.TAG;
 import static com.example.halward.login.LoginActivity.currentUser;
@@ -78,6 +81,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private Spinner mSpinner;
     private  Resources res;
     private String[] tags;
+    private HashMap<String, Boolean> mHashMap = new HashMap<>();
 
 
     @Override
@@ -135,7 +139,16 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                 mHabits = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Habit habit = document.toObject(Habit.class);
-                    if (habit.isActive()){
+                    mHashMap = habit.getsHabitToday();
+                    Date date = new Date();
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                    String dateToString = format.format(date);
+                    try {
+                        date =  new SimpleDateFormat("yyyy-MM-dd").parse(dateToString);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    if (habit.isActive() && mHashMap.get(dateToString) == false){
                         mHabits.add(habit);
                     }
                 }

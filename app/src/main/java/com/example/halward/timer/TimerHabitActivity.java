@@ -25,19 +25,18 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.example.halward.model.User.sHabitsDone;
 
 public class TimerHabitActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -83,14 +82,23 @@ public class TimerHabitActivity extends AppCompatActivity implements View.OnClic
                 mHabits = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Habit habit = document.toObject(Habit.class);
-                     if (habit.isActive()){
+                    mHashMap = habit.getsHabitToday();
+                    Date date = new Date();
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                    String dateToString = format.format(date);
+                    try {
+                        date =  new SimpleDateFormat("yyyy-MM-dd").parse(dateToString);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    if (habit.isActive() && mHashMap.get(dateToString) == false) {
                         mHabits.add(habit);
                     }
                 }
             }
         });
 
-        //get position of habit from HomeFragment
+        // Get position of habit from HomeFragment
         Intent intent = getIntent();
         position = intent.getIntExtra("position", 0);
 
@@ -117,10 +125,7 @@ public class TimerHabitActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         if (v.getId() == R.id.button_timerview_start) {
 
-            //setTimer();
             mProgressBar1.setMax((int) seconds * 1000);
-            //buttonStartTime.setVisibility(View.INVISIBLE);
-            //buttonStopTime.setVisibility(View.VISIBLE);
             mProgressBar.setVisibility(View.INVISIBLE);
             startTimer();
             mProgressBar1.setVisibility(View.VISIBLE);
@@ -131,9 +136,7 @@ public class TimerHabitActivity extends AppCompatActivity implements View.OnClic
         } else if (v.getId() == R.id.button_timerview_reset) {
             timerReset();
             mProgressBar1.setMax((int) seconds * 1000);
-            mProgressBar.setVisibility(View.INVISIBLE);
-            //buttonStartTime.setVisibility(View.VISIBLE);
-            //buttonStopTime.setVisibility(View.INVISIBLE);
+            //mProgressBar1.setVisibility(View.INVISIBLE);
 
         } else if (v.getId() == R.id.done_button) {
             ifDone();
@@ -147,7 +150,7 @@ public class TimerHabitActivity extends AppCompatActivity implements View.OnClic
         outState.putLong("seconds", seconds);
     }
 
-    //set for every habit 30 minutes
+    //Set for every habit 30 minutes
     private void setTimer() {
         time = 1800;
         totalTimeCountInMilliseconds = time * 1000;
@@ -164,6 +167,7 @@ public class TimerHabitActivity extends AppCompatActivity implements View.OnClic
                         + ":" + String.format("%02d", seconds % 60));
             }
 
+            //Set timer 00:00 when it finished
             @Override
             public void onFinish() {
                 Toast.makeText(TimerHabitActivity.this, "Well done!", Toast.LENGTH_SHORT).show();
@@ -177,6 +181,7 @@ public class TimerHabitActivity extends AppCompatActivity implements View.OnClic
         }.start();
     }
 
+    // Pause the timer
     public void stopTimer() {
         countDownTimer.cancel();
         mProgressBar1.setVisibility(View.GONE);
@@ -185,6 +190,7 @@ public class TimerHabitActivity extends AppCompatActivity implements View.OnClic
         //buttonStopTime.setVisibility(View.INVISIBLE);
     }
 
+    //Reset the Timer
     private void timerReset() {
         Log.i("Sec", Long.toString(time));
         countDownTimer.cancel();
@@ -192,7 +198,7 @@ public class TimerHabitActivity extends AppCompatActivity implements View.OnClic
         seconds = 1800;
     }
 
-// When user clicked Done Button in Timer -> Change Habit property Done -> true and save in Firebase.
+    // When user clicked Done Button in Timer -> Change Habit property Done -> true and save in Firebase.
     private void ifDone() {
         mHabit = mHabits.get(position);
         mHabitsDone = new HabitsDone();
@@ -204,7 +210,7 @@ public class TimerHabitActivity extends AppCompatActivity implements View.OnClic
                 mHabits = new ArrayList<>();
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Habit habit = document.toObject(Habit.class);
-                    if (habit.getName().equals(mHabit.getName())){
+                    if (habit.getDocumentName().equals(mHabit.getDocumentName())) {
                         habit.setDone(true);
                         Date date = new Date();
                         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -214,8 +220,8 @@ public class TimerHabitActivity extends AppCompatActivity implements View.OnClic
                         data.put(dateToString, true);
                         mHashMap = habit.getsHabitToday();
                         mHashMap.computeIfPresent(dateToString, (k, v) -> true);
-                       for (Map.Entry entry : mHashMap.entrySet() ){
-                           data.put(entry.getKey().toString(), entry.getValue());
+                        for (Map.Entry entry : mHashMap.entrySet()) {
+                            data.put(entry.getKey().toString(), entry.getValue());
                         }
                         document.getReference().update("done", true);
                         document.getReference().update("sHabitToday", data);

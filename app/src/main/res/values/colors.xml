@@ -15,4 +15,10 @@
     <color name="text_timer">#5d5b6a</color>
     <color name="progress">#faf4ff</color>
     <color name="horiz_progress">#dbdbdb</color>
+    <color name="tag1">#b590ca</color>
+    <color name="tag2">#a6b1e1</color>
+    <color name="tag3">#f6ecbf</color>
+    <color name="tag4">#c9b6e4</color>
+    <color name="tag5">#fbc1bc</color>
+    <color name="tag6">#bbe1fa</color>
 </resources>

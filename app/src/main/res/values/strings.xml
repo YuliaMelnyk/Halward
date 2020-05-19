@@ -57,7 +57,7 @@
     <string name="stat_text">Statistics</string>
     <string name="percent_daily">50% achived for today.</string>
     <string name="daily_progress">Daily progress</string>
-
+    <string name="tags_progress">Tags daily progress</string>
 
     <!--    array list for tags-->
     <string-array name="tags">

@@ -76,6 +76,7 @@ public class ProfileActivity extends AppCompatActivity implements CommonAdapter.
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         userName = mFirebaseUser.getDisplayName();
 
+        // Binding information about user
         currentUser = new User();
         currentUser.setName(userName);
         currentUser.setName(mFirebaseUser.getDisplayName());
@@ -95,7 +96,7 @@ public class ProfileActivity extends AppCompatActivity implements CommonAdapter.
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+            //set toolbar
             toolbar.inflateMenu(R.menu.menu_profile);
             Menu menu = toolbar.getMenu();
             toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.back24));
@@ -111,6 +112,7 @@ public class ProfileActivity extends AppCompatActivity implements CommonAdapter.
         db = FirebaseFirestore.getInstance();
         collectionReference = db.collection("habits");
 
+        // Get All habits from FireBase
         final ProfileActivity self = this;
         collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -171,6 +173,7 @@ public class ProfileActivity extends AppCompatActivity implements CommonAdapter.
         mSwipeRefreshLayout.setRefreshing(false);
     }
 
+    // On click -> open Habit Dialog window
     @Override
     public void onItemClick(View view, int position) {
         HabitDialog habitDialog = new HabitDialog(position);
@@ -178,7 +181,7 @@ public class ProfileActivity extends AppCompatActivity implements CommonAdapter.
     }
 
 
-   public class MyClickHandlers {
+    public class MyClickHandlers {
 
         Context context;
 
@@ -186,11 +189,11 @@ public class ProfileActivity extends AppCompatActivity implements CommonAdapter.
             this.context = context;
         }
 
-       /**
-        * Demonstrating updating bind data
-        * profile image
-        * will be updated on Fab click
-        */
+        /**
+         * Demonstrating updating bind data
+         * profile image
+         * will be updated on Fab click
+         */
         public void onProfileFabClicked(View view) {
             currentUser.setName("Sir David Attenborough");
             //currentUser.setPhoto("https://api.androidhive.info/images/nature/david1.jpg");
