@@ -5,7 +5,7 @@
     <color name="colorAccent">#FFF</color>
     <color name="button_disable">#fed39f</color>
     <color name="button_enabled">#4a47a3</color>
-    <color name="button_color">#413c69   </color>
+    <color name="button_color">#413c69</color>
     <color name="colorTransparent">#00ffffff</color>
     <color name="background">#ECF0F1</color>
     <color name="nav_primary">#95A5A6</color>
@@ -15,10 +15,12 @@
     <color name="text_timer">#5d5b6a</color>
     <color name="progress">#faf4ff</color>
     <color name="horiz_progress">#dbdbdb</color>
+    <color name="timer_text">#35495e</color>
     <color name="tag1">#b590ca</color>
     <color name="tag2">#a6b1e1</color>
     <color name="tag3">#f6ecbf</color>
     <color name="tag4">#c9b6e4</color>
     <color name="tag5">#fbc1bc</color>
     <color name="tag6">#bbe1fa</color>
+
 </resources>

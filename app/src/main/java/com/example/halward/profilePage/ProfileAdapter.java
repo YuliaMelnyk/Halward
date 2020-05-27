@@ -30,7 +30,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private List<Habit> mHabits;
     private Context mContext;
     private int resourse;
-    private CommonAdapter.ItemClickListener mClickListener;
+    private ItemClickListener mClickListener;
 
     public ProfileAdapter(Context mContext, List<Habit> mhabits, int resourse) {
         this.mContext = mContext;
@@ -118,7 +118,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     // allows clicks events to be caught
-    public void setClickListener(CommonAdapter.ItemClickListener itemClickListener) {
+    public void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;
     }
 

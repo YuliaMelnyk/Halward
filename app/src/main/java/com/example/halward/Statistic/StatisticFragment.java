@@ -1,9 +1,7 @@
 package com.example.halward.Statistic;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,10 +10,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.halward.R;
@@ -25,7 +21,6 @@ import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -83,10 +78,10 @@ public class StatisticFragment extends Fragment {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_statistic, container, false);
 
-        horizProgressBar = (ProgressBar) view.findViewById(R.id.progress_horizontal);
+        horizProgressBar = (ProgressBar) view.findViewById(R.id.habit_duration);
         circleProgress = (ProgressBar) view.findViewById(R.id.circle_daily);
         textCount = (TextView) view.findViewById(R.id.text_count_habit);
-        dailyPercent = (TextView) view.findViewById(R.id.percent_daily);
+        dailyPercent = (TextView) view.findViewById(R.id.minutes);
 
         //get reference to the spinner from the XML layout
         //mSpinner = (Spinner) view.findViewById(R.id.appCompatSpinner);

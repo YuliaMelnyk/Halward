@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -59,7 +61,7 @@ import static com.example.halward.login.LoginActivity.currentUser;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, InitCollapsing, CommonAdapter.ItemClickListener{
+public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, InitCollapsing, CommonAdapter.ItemClickListener {
 
     private ArrayList<Habit> mHabits;
     private RecyclerView mRecyclerView;
@@ -79,7 +81,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public static User currentUser;
     private Context mContext;
     private Spinner mSpinner;
-    private  Resources res;
+    private Resources res;
     private String[] tags;
     private HashMap<String, Boolean> mHashMap = new HashMap<>();
 
@@ -103,9 +105,9 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         user = mFirebaseAuth.getCurrentUser();
         userName = user.getDisplayName();
 
-       if (user.getPhotoUrl() == null){
+        if (user.getPhotoUrl() == null) {
             currentUser.setPhoto("/Users/serhiimelnyk/material-components-android-codelabs/java/Halward/app/src/main/res/drawable/images.png");
-        }else{
+        } else {
             currentUser.setPhoto(user.getPhotoUrl().toString());
         }
         currentUser.setName(user.getDisplayName());
@@ -126,7 +128,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mHelloText = (TextView) view.findViewById(R.id.hello);
         mHelloText.setText("Hello " + userName + "!");
 
-        res= getResources();
+        res = getResources();
         tags = res.getStringArray(R.array.tags);
 
 
@@ -134,6 +136,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         collectionReference = db.collection("habits");
 
         collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 mHabits = new ArrayList<>();
@@ -143,12 +146,7 @@ public class HomeFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     Date date = new Date();
                     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                     String dateToString = format.format(date);
-                    try {
-                        date =  new SimpleDateFormat("yyyy-MM-dd").parse(dateToString);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    if (habit.isActive() && mHashMap.get(dateToString) == false){
+                    if (habit.isActive() && mHashMap.containsKey(dateToString) && !mHashMap.get(dateToString)) {
                         mHabits.add(habit);
                     }
                 }

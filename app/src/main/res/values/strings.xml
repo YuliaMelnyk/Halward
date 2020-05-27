@@ -58,6 +58,15 @@
     <string name="percent_daily">50% achived for today.</string>
     <string name="daily_progress">Daily progress</string>
     <string name="tags_progress">Tags daily progress</string>
+    <string name="habits_tab">All habits</string>
+    <string name="settings_tab">Settings</string>
+    <string name="timer">Timer</string>
+    <string name="habit_dur">Habit duration</string>
+    <string name="minutes">Minutes</string>
+    <string name="minutes_count">30</string>
+    <string name="notifications">Notifications</string>
+    <string name="notif_sound">Notification sound</string>
+    <string name="vobration">Vibration</string>
 
     <!--    array list for tags-->
     <string-array name="tags">

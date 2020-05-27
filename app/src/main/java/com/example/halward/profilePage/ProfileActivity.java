@@ -11,12 +11,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
 import com.example.halward.HabitDialog;
@@ -31,6 +34,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
@@ -65,6 +69,11 @@ public class ProfileActivity extends AppCompatActivity implements CommonAdapter.
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private Context mContext;
     private ProfileAdapter mProfileAdapter;
+    public static TabLayout mTabLayout;
+    public static ViewPager viewPager;
+    private PackageTabAdapter adapter;
+    public ArrayList<Fragment> mFragments;
+
 
 
     @Override
@@ -86,9 +95,25 @@ public class ProfileActivity extends AppCompatActivity implements CommonAdapter.
 
         handlers = new ProfileActivity.MyClickHandlers(mContext);
 
+
+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_profile);
             setSupportActionBar(toolbar);
+
+            viewPager = (ViewPager) findViewById(R.id.profile_viewPager);
+            viewPager.setOffscreenPageLimit(2);
+
+            // Attach to the TabLayout title of tabs
+            mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
+            mTabLayout.addTab(mTabLayout.newTab().setText(R.string.habits_tab));
+            mTabLayout.addTab(mTabLayout.newTab().setText(R.string.settings_tab));
+
+            mFragments = new ArrayList<>();
+            mFragments.add(new Tab1Fragment());
+            mFragments.add(new Tab2Fragment());
+
+            createTabFragment();
 
             initCollapsingToolbar();
             try {
@@ -100,6 +125,7 @@ public class ProfileActivity extends AppCompatActivity implements CommonAdapter.
             toolbar.inflateMenu(R.menu.menu_profile);
             Menu menu = toolbar.getMenu();
             toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.back24));
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
             toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -109,7 +135,9 @@ public class ProfileActivity extends AppCompatActivity implements CommonAdapter.
             });
         }
 
-        db = FirebaseFirestore.getInstance();
+
+
+      /*  db = FirebaseFirestore.getInstance();
         collectionReference = db.collection("habits");
 
         // Get All habits from FireBase
@@ -131,7 +159,7 @@ public class ProfileActivity extends AppCompatActivity implements CommonAdapter.
                 mProfileAdapter.notifyDataSetChanged();
 
             }
-        });
+        });*/
 /*
         mImageButton = (ImageButton) view.findViewById(R.id.back_home);
 
@@ -158,7 +186,14 @@ public class ProfileActivity extends AppCompatActivity implements CommonAdapter.
         });*/
 
     }
+    private void createTabFragment(){
+        adapter = new PackageTabAdapter(getSupportFragmentManager(), getApplicationContext(), mFragments);
+        viewPager.setAdapter(adapter);
+        mTabLayout.setupWithViewPager(viewPager);
 
+        mTabLayout.getTabAt(0).setText(R.string.habits_tab);
+        mTabLayout.getTabAt(1).setText(R.string.settings_tab);
+    }
 
     @Override
     public void initCollapsingToolbar() {

@@ -17,10 +17,18 @@
         android:layout_centerHorizontal="true"
         tools:context=".profilePage.ProfileActivity">
 
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/app_profile_bar"
             android:layout_width="match_parent"
-            android:layout_height="320dp"
+            android:layout_height="300dp"
+            android:clipChildren="false"
             android:fitsSystemWindows="true"
             android:layout_centerHorizontal="true"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -31,10 +39,11 @@
                 android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
                 android:textAlignment="center"
+                android:clipChildren="false"
                 android:layout_centerHorizontal="true"
                 app:contentScrim="?attr/colorPrimary"
                 app:expandedTitleGravity="center_horizontal|bottom"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
                 app:statusBarScrim="@android:color/transparent">
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -50,8 +59,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
-
+                    android:layout_height="220dp"
                     android:orientation="vertical"
                     android:paddingTop="@dimen/card_margin"
                     android:paddingBottom="@dimen/card_margin">
@@ -77,6 +85,14 @@
                             android:src="@drawable/nav_add"
                             app:fabCustomSize="@dimen/fab_profile" />
                     </RelativeLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="@{user.name}"
+                        android:textSize="20sp"
+                        android:textColor="@color/colorPrimary"
+                        android:layout_gravity="center"/>
 
                 </LinearLayout>
                 </RelativeLayout>
@@ -85,22 +101,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:textAlignment="center"
-                    app:titleTextAppearance="@style/Toolbar.TitleText"
-                    app:title="@{user.name}"
                     app:layout_collapseMode="pin"
                     app:popupTheme="@style/ThemeOverlay.AppCompat" />
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-            <com.google.android.material.appbar.CollapsingToolbarLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_scrollFlags="scroll|enterAlways">
 
                 <com.google.android.material.tabs.TabLayout
                     android:id="@+id/tab_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize" />
+                    android:layout_height="50dp"
+                    android:layout_gravity="bottom"
+                    app:tabGravity="center"
+                    app:tabIndicatorHeight="3dp"
+                    app:tabMode="scrollable"
+                    android:gravity="bottom"/>
             </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.viewpager.widget.ViewPager
@@ -108,11 +123,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-
-            <include layout="@layout/content_habit_profile" />
-
-
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
