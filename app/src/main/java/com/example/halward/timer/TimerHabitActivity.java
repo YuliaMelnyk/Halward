@@ -47,6 +47,7 @@ public class TimerHabitActivity extends AppCompatActivity implements View.OnClic
     private TextView textViewShowTime;
     private CountDownTimer countDownTimer;
     private long totalTimeCountInMilliseconds;
+    public static long timeDuration;
     private long seconds;
     private int position;
     private int time;
@@ -91,7 +92,7 @@ public class TimerHabitActivity extends AppCompatActivity implements View.OnClic
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    if (habit.isActive() && mHashMap.get(dateToString) == false) {
+                    if (habit.isActive() && mHashMap.containsKey(dateToString) &&!mHashMap.get(dateToString)) {
                         mHabits.add(habit);
                     }
                 }
@@ -117,7 +118,11 @@ public class TimerHabitActivity extends AppCompatActivity implements View.OnClic
 
         mProgressBar = (ProgressBar) findViewById(R.id.progressbar_timerview);
         mProgressBar1 = (ProgressBar) findViewById(R.id.progressbar1_timerview);
-        seconds = 1800;
+        if (timeDuration == 0){
+            timeDuration = 1800;
+        }
+        seconds = timeDuration;
+
     }
 
     // methods on click for start, stop and reset buttons
@@ -152,7 +157,7 @@ public class TimerHabitActivity extends AppCompatActivity implements View.OnClic
 
     //Set for every habit 30 minutes
     private void setTimer() {
-        time = 1800;
+        time = (int) seconds;
         totalTimeCountInMilliseconds = time * 1000;
         mProgressBar1.setMax(time * 1000);
     }
@@ -195,7 +200,7 @@ public class TimerHabitActivity extends AppCompatActivity implements View.OnClic
         Log.i("Sec", Long.toString(time));
         countDownTimer.cancel();
         textViewShowTime.setText("30:00");
-        seconds = 1800;
+        seconds = timeDuration;
     }
 
     // When user clicked Done Button in Timer -> Change Habit property Done -> true and save in Firebase.
@@ -211,7 +216,6 @@ public class TimerHabitActivity extends AppCompatActivity implements View.OnClic
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     Habit habit = document.toObject(Habit.class);
                     if (habit.getDocumentName().equals(mHabit.getDocumentName())) {
-                        habit.setDone(true);
                         Date date = new Date();
                         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                         String dateToString = format.format(date);

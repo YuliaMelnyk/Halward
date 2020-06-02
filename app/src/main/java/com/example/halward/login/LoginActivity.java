@@ -67,7 +67,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
-
     //Firebase Firestore
     private FirebaseFirestore db;
 

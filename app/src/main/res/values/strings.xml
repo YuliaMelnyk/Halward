@@ -67,6 +67,19 @@
     <string name="notifications">Notifications</string>
     <string name="notif_sound">Notification sound</string>
     <string name="vobration">Vibration</string>
+    <string name="twenty">20 min</string>
+    <string name="thirty">30 min</string>
+    <string name="forty">40 min</string>
+    <string name="fifty">50 min</string>
+    <string name="sixty">60 min</string>
+    <string name="timerHabitTittle">Choose time for your work</string>
+    <string name="weekly_progress">Weekly progress</string>
+    <string name="m">M</string>
+    <string name="t">T</string>
+    <string name="percent_week">33% achieved this week</string>
+    <string name="w">W</string>
+    <string name="f">F</string>
+    <string name="s">S</string>
 
     <!--    array list for tags-->
     <string-array name="tags">

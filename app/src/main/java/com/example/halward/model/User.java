@@ -25,6 +25,7 @@ public class User extends BaseObservable {
     private List<Habit> mHabits;
     private String mPhoto;
     public static HashMap<Date, HabitsDone> sHabitsDone;
+    private String time;
 
     public User() {
     }
@@ -94,6 +95,14 @@ public class User extends BaseObservable {
 
     public void setHabits(List<Habit> habits) {
         mHabits = habits;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }
 

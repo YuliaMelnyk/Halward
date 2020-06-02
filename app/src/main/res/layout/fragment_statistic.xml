@@ -8,7 +8,6 @@
     android:background="@color/background"
     tools:context=".Statistic.StatisticFragment">
 
-
     <TextView
         android:id="@+id/settingTittle"
         android:layout_width="wrap_content"
@@ -28,7 +27,7 @@
         style="@style/Widget.MaterialComponents.CardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="25dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         app:cardBackgroundColor="@color/colorAccent"
@@ -58,7 +57,6 @@
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
 
             <ProgressBar
                 android:id="@+id/habit_duration"
@@ -110,13 +108,13 @@
                     android:id="@+id/circle_daily"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="150dp"
-                    android:layout_height="150dp"
+                    android:layout_height="140dp"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:layout_gravity="center_horizontal|bottom"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="0dp"
                     android:indeterminate="false"
                     android:progressDrawable="@drawable/circleshape2_timeview" />
 
@@ -135,7 +133,6 @@
 
             </RelativeLayout>
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
@@ -145,7 +142,7 @@
         style="@style/Widget.MaterialComponents.CardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="25dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         app:cardBackgroundColor="@color/colorAccent"
@@ -199,8 +196,6 @@
                     android:layout_marginBottom="8dp"
                     android:indeterminate="false" />
 
-
-
             </RelativeLayout>
 
 
@@ -208,5 +203,323 @@
 
     </androidx.cardview.widget.CardView>
 
+    <androidx.cardview.widget.CardView
+        android:id="@+id/week_progress"
+        style="@style/Widget.MaterialComponents.CardView"
+        android:layout_width="match_parent"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_height="140dp"
+        app:cardBackgroundColor="@color/colorAccent"
+        app:cardCornerRadius="@dimen/card_radius"
+        app:cardElevation="@dimen/card_elevation"
+        app:layout_constraintTop_toBottomOf="@+id/tags_progress"
+        tools:layout_editor_absoluteX="10dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/weeklyProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/source_sans"
+                android:text="@string/weekly_progress"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/text_timer"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@+id/percentWeekly"
+                app:layout_constraintEnd_toStartOf="@+id/days_of_the_week"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+            <TextView
+                android:id="@+id/percentWeekly"
+                android:layout_width="108dp"
+                android:layout_height="43dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:fontFamily="@font/source_sans"
+                android:text="@string/percent_week"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/text_timer"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/days_of_the_week"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/weeklyProgress" />
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/days_of_the_week"
+                android:layout_width="210dp"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="H, 12:12"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:id="@+id/weekHabits"
+                    android:layout_width="200dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/week_progress_linear">
+
+                    <TextView
+                        android:id="@+id/monday_habits"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:text="@string/m"
+                        android:textColor="@color/text_timer"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/tuesday_habits"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:text="@string/t"
+                        android:textColor="@color/text_timer"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/wednesday_habits"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:text="@string/w"
+                        android:textColor="@color/text_timer"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/thursday_habits"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="20dp"
+                        android:text="@string/t"
+                        android:textColor="@color/text_timer"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/friday_habits"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="19dp"
+                        android:text="@string/f"
+                        android:textColor="@color/text_timer"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/saturday_habits"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="19dp"
+                        android:text="@string/s"
+                        android:textColor="@color/text_timer"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/sunday_habits"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="19dp"
+                        android:text="@string/s"
+                        android:textColor="@color/text_timer"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/week_progress_linear"
+                    android:layout_width="199dp"
+                    android:layout_height="108dp"
+                    android:paddingTop="15dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="@+id/weekNames"
+                    app:layout_constraintTop_toBottomOf="@+id/weekHabits">
+
+                    <ProgressBar
+                        android:id="@+id/monday_progress"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="15dp"
+                        android:layout_height="70dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:max="100"
+                        android:progress="25"
+                        android:progressDrawable="@drawable/progress_vertical" />
+
+                    <ProgressBar
+                        android:id="@+id/tuesday_progress"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="15dp"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:max="100"
+                        android:progress="35"
+                        android:progressDrawable="@drawable/progress_vertical"
+                        app:layout_constraintStart_toEndOf="@+id/monday_progress"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ProgressBar
+                        android:id="@+id/wednesday_progress"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="15dp"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:max="100"
+                        android:progress="100"
+                        android:progressDrawable="@drawable/progress_vertical"
+                        app:layout_constraintStart_toEndOf="@+id/tuesday_progress"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ProgressBar
+                        android:id="@+id/thursday_progress"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="15dp"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:max="100"
+                        android:progress="45"
+                        android:progressDrawable="@drawable/progress_vertical"
+                        app:layout_constraintStart_toEndOf="@+id/wednesday_progress"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ProgressBar
+                        android:id="@+id/friday_progress"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="15dp"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:max="100"
+                        android:progress="55"
+                        android:progressDrawable="@drawable/progress_vertical"
+                        app:layout_constraintStart_toEndOf="@+id/thursday_progress"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ProgressBar
+                        android:id="@+id/saturday_progress"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="15dp"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:max="100"
+                        android:progress="70"
+                        android:progressDrawable="@drawable/progress_vertical"
+                        app:layout_constraintStart_toEndOf="@+id/friday_progress"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ProgressBar
+                        android:id="@+id/sunday_progress"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="15dp"
+                        android:layout_height="70dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="10dp"
+                        android:max="100"
+                        android:progress="45"
+                        android:progressDrawable="@drawable/progress_vertical"
+                        app:layout_constraintStart_toEndOf="@+id/saturday_progress"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/weekNames"
+                    android:layout_width="200dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="-5dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/week_progress_linear">
+
+                    <TextView
+                        android:id="@+id/monday_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="19dp"
+                        android:text="@string/m"
+                        android:textColor="@color/text_timer"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/tuesday_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="19dp"
+                        android:text="@string/t"
+                        android:textColor="@color/text_timer"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/wednesday_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="18dp"
+                        android:text="@string/w"
+                        android:textColor="@color/text_timer"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/thursday_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="19dp"
+                        android:text="@string/t"
+                        android:textColor="@color/text_timer"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/friday_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="19dp"
+                        android:text="@string/f"
+                        android:textColor="@color/text_timer"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/saturday_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="19dp"
+                        android:text="@string/s"
+                        android:textColor="@color/text_timer"
+                        android:textSize="10sp" />
+
+                    <TextView
+                        android:id="@+id/sunday_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="19dp"
+                        android:text="@string/s"
+                        android:textColor="@color/text_timer"
+                        android:textSize="10sp" />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

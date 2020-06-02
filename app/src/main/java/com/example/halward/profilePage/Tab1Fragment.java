@@ -68,7 +68,11 @@ public class Tab1Fragment extends Fragment implements ProfileAdapter.ItemClickLi
         currentUser = new User();
         currentUser.setName(userName);
         currentUser.setName(mFirebaseUser.getDisplayName());
-        currentUser.setPhoto(mFirebaseUser.getPhotoUrl().toString());
+        if (mFirebaseUser.getPhotoUrl() == null){
+            currentUser.setPhoto("https://firebasestorage.googleapis.com/v0/b/halward-2932c.appspot.com/o/''.jpg?alt=media&token=b5961abc-1f54-43b6-b6d4-4c12c00cabc6");
+        } else {
+            currentUser.setPhoto(mFirebaseUser.getPhotoUrl().toString());
+        }
 
         db = FirebaseFirestore.getInstance();
         collectionReference = db.collection("habits");

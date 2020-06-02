@@ -1,7 +1,6 @@
 package com.example.halward.profilePage;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.halward.CommonAdapter;
 import com.example.halward.R;
-import com.example.halward.addActivity.AddHabitActivity;
-import com.example.halward.calendarPage.CalendarAdapter;
 import com.example.halward.model.Habit;
 import com.squareup.picasso.Picasso;
 

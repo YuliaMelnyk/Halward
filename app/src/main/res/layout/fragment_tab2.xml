@@ -3,33 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/frameLayout"
+    android:paddingTop="50dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
     tools:context=".profilePage.Tab2Fragment">
-
-
-    <TextView
-        android:id="@+id/settingTittle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/source_sans"
-        android:text="@string/settings_tab"
-        android:textSize="27sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.062"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.088" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/timer_settings"
         style="@style/Widget.MaterialComponents.CardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="15dp"
         app:cardBackgroundColor="@color/colorAccent"
         app:cardCornerRadius="@dimen/card_radius"
         app:cardElevation="@dimen/card_elevation"
@@ -42,35 +27,37 @@
 
             <ImageView
                 android:id="@+id/imageTimer"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="7dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
                 android:background="@drawable/timer"
                 app:layout_constraintBottom_toTopOf="@+id/habit_duration"
                 app:layout_constraintEnd_toStartOf="@+id/timerText"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/timerText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginEnd="10dp"
+                android:layout_marginTop="7dp"
                 android:fontFamily="@font/source_sans"
                 android:text="@string/timer"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/colorPrimary"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/habit_duration"
                 app:layout_constraintEnd_toStartOf="@+id/progress_daily"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/imageTimer"
                 app:layout_constraintTop_toTopOf="parent" />
-
 
             <TextView
                 android:id="@+id/habit_duration"
@@ -79,12 +66,12 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="15dp"
+                android:layout_marginTop="15dp"
                 android:fontFamily="@font/source_sans"
                 android:text="@string/habit_dur"
                 android:textColor="@color/text_timer"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 app:layout_constraintEnd_toStartOf="@+id/progress_daily"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -93,46 +80,47 @@
 
             <ImageButton
                 android:id="@+id/downButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="15dp"
                 android:background="@drawable/down"
                 app:layout_constraintBottom_toTopOf="@+id/minutes"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.816"
+                app:layout_constraintHorizontal_bias="0.825"
                 app:layout_constraintStart_toEndOf="@+id/habit_duration"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.792" />
+                app:layout_constraintVertical_bias="0.85" />
 
             <TextView
                 android:id="@+id/minutes_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="15dp"
                 android:fontFamily="@font/source_sans"
                 android:text="@string/minutes_count"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/timer_text"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                android:textSize="25sp"
-                android:layout_marginBottom="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/minutes"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/habit_duration" />
+                app:layout_constraintTop_toBottomOf="@+id/habit_duration"
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/minutes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/source_sans"
                 android:text="@string/minutes"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/timer_text"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                android:textSize="25sp"
                 app:layout_constraintStart_toEndOf="@id/minutes_count"
                 app:layout_constraintTop_toBottomOf="@+id/habit_duration" />
 
@@ -146,7 +134,7 @@
         style="@style/Widget.MaterialComponents.CardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="25dp"
         app:cardBackgroundColor="@color/colorAccent"
         app:cardCornerRadius="@dimen/card_radius"
         app:cardElevation="@dimen/card_elevation"
@@ -160,32 +148,32 @@
 
             <ImageView
                 android:id="@+id/imageNotifications"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="4dp"
                 android:background="@drawable/bell2"
                 app:layout_constraintBottom_toTopOf="@+id/notif_sound"
                 app:layout_constraintEnd_toStartOf="@+id/notificationsText"
                 app:layout_constraintStart_toStartOf="parent" />
-
 
             <TextView
                 android:id="@+id/notificationsText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/source_sans"
                 android:text="@string/notifications"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/colorPrimary"
-                android:textSize="25sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/notif_sound"
                 app:layout_constraintStart_toEndOf="@+id/imageNotifications"
                 app:layout_constraintTop_toTopOf="parent" />
+
 
             <TextView
                 android:id="@+id/notif_sound"
@@ -193,17 +181,14 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="15dp"
                 android:fontFamily="@font/source_sans"
                 android:text="@string/notif_sound"
                 android:textColor="@color/text_timer"
-                android:textSize="20sp"
-                app:layout_constraintHorizontal_bias="0.0"
+                android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/notificationsText" />
-
 
             <Switch
                 android:id="@+id/switch1"
@@ -213,10 +198,10 @@
                 android:theme="@style/SCBSwitch"
                 app:layout_constraintBottom_toTopOf="@+id/switch2"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.758"
+                app:layout_constraintHorizontal_bias="0.817"
                 app:layout_constraintStart_toEndOf="@+id/notif_sound"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.84" />
+                app:layout_constraintVertical_bias="0.725" />
 
             <TextView
                 android:id="@+id/vibration"
@@ -225,13 +210,13 @@
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="15dp"
-                android:paddingBottom="20dp"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/source_sans"
+                android:paddingBottom="15dp"
                 android:text="@string/vobration"
                 android:textColor="@color/text_timer"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/notif_sound" />
@@ -243,10 +228,10 @@
                 android:layout_height="wrap_content"
                 android:checked="true"
                 android:theme="@style/SCBSwitch"
-                android:layout_marginBottom="20dp"
+                android:paddingBottom="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.825"
+                app:layout_constraintHorizontal_bias="0.85"
                 app:layout_constraintStart_toEndOf="@+id/vibration"
                 app:layout_constraintTop_toBottomOf="@+id/switch1"
                 app:layout_constraintTop_toTopOf="parent"
@@ -262,7 +247,7 @@
         style="@style/Widget.MaterialComponents.CardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="25dp"
         app:cardBackgroundColor="@color/colorAccent"
         app:cardCornerRadius="@dimen/card_radius"
         app:cardElevation="@dimen/card_elevation"
@@ -275,24 +260,23 @@
 
 
             <Button
-                android:id="@+id/tags_text"
+                android:id="@+id/logout"
                 android:layout_width="100dp"
                 android:layout_height="50dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/create_button"
                 android:fontFamily="@font/source_sans"
                 android:text="@string/logout"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/colorAccent"
                 android:textSize="20sp"
-                android:layout_marginBottom="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
-
-
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

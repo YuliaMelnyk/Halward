@@ -52,6 +52,7 @@ import static com.example.halward.login.LoginActivity.currentUser;
  */
 public class ProfileActivity extends AppCompatActivity implements CommonAdapter.ItemClickListener, SwipeRefreshLayout.OnRefreshListener, InitCollapsing {
 
+
     private MyClickHandlers handlers;
 
     private TextView mLogout;
@@ -81,6 +82,7 @@ public class ProfileActivity extends AppCompatActivity implements CommonAdapter.
         super.onCreate(savedInstanceState);
         ActivityProfileBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_profile);
 
+
         mFirebaseAuth = FirebaseAuth.getInstance();
         mFirebaseUser = mFirebaseAuth.getCurrentUser();
         userName = mFirebaseUser.getDisplayName();
@@ -89,7 +91,11 @@ public class ProfileActivity extends AppCompatActivity implements CommonAdapter.
         currentUser = new User();
         currentUser.setName(userName);
         currentUser.setName(mFirebaseUser.getDisplayName());
-        currentUser.setPhoto(mFirebaseUser.getPhotoUrl().toString());
+        if (mFirebaseUser.getPhotoUrl() == null){
+            currentUser.setPhoto("https://firebasestorage.googleapis.com/v0/b/halward-2932c.appspot.com/o/''.jpg?alt=media&token=b5961abc-1f54-43b6-b6d4-4c12c00cabc6");
+        } else {
+            currentUser.setPhoto(mFirebaseUser.getPhotoUrl().toString());
+        }
 
         binding.setUser(currentUser);
 
@@ -135,55 +141,6 @@ public class ProfileActivity extends AppCompatActivity implements CommonAdapter.
             });
         }
 
-
-
-      /*  db = FirebaseFirestore.getInstance();
-        collectionReference = db.collection("habits");
-
-        // Get All habits from FireBase
-        final ProfileActivity self = this;
-        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                mHabits = new ArrayList<>();
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    Habit habit = document.toObject(Habit.class);
-                    mHabits.add(habit);
-                }
-                mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view_profile);
-                //mRecyclerView.setHasFixedSize(true);
-                mRecyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-                mProfileAdapter = new ProfileAdapter(mContext, mHabits, R.layout.cardview_habit_profile);
-                mRecyclerView.setAdapter(mProfileAdapter);
-                mProfileAdapter.setClickListener(self);
-                mProfileAdapter.notifyDataSetChanged();
-
-            }
-        });*/
-/*
-        mImageButton = (ImageButton) view.findViewById(R.id.back_home);
-
-        mImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), HomeActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                getActivity().startActivity(intent);
-            }
-        });
-*/
-
-/*        mLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FirebaseAuth.getInstance().signOut(); // logout
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                getActivity().startActivity(intent);
-            }
-        });*/
 
     }
     private void createTabFragment(){
