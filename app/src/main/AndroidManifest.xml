@@ -23,9 +23,11 @@
         <activity android:name=".timer.TimerHabitActivity" />
         <activity android:name=".SplashActivity" />
         <activity android:name=".homePage.HomeActivity" />
-        <activity android:name=".addActivity.AddHabitActivity" />
+        <activity android:name=".addActivity.AddHabitActivity"
+            android:parentActivityName=".homePage.HomeActivity"></activity>
         <activity android:name=".ProgressActivity" />
-        <activity android:name=".profilePage.ProfileActivity" />
+        <activity android:name=".profilePage.ProfileActivity"
+            android:parentActivityName=".homePage.HomeActivity"/>
         <activity android:name=".calendarPage.CalendarActivity" />
 
         <meta-data

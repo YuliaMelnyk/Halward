@@ -121,15 +121,6 @@ public class AddHabitFragment extends Fragment implements ConvertDataTypes {
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
 
-        mPhoto = (ImageButton) view.findViewById(R.id.back_home);
-        mPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), HomeActivity.class);
-                getActivity().startActivity(intent);
-
-            }
-        });
 
         mSwitch = (Switch) view.findViewById(R.id.switch_desc);
 

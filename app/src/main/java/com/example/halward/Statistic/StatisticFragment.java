@@ -240,7 +240,7 @@ public class StatisticFragment extends Fragment {
 
                 double percentWeek = (double) (mMondayDone.size() + mTuesdayDone.size() + mWednesdayDone.size() + mThursdayDone.size() + mFridayDone.size() + mSaturdayDone.size() + mSundayDone.size()) /
                         (mMondayList.size() + mTuesdayDone.size() + mWednesdayList.size() + mThursdayList.size() + mFridayList.size() + mSaturdayList.size() + mSundayList.size());
-                weeklyPercent.setText(round(percentWeek, 2) + "% achieved this week");
+                weeklyPercent.setText(round(percentWeek*100, 2) + "% achieved this week");
                 // Set value of habits in progress
                 textCount.setText(mHabitsDone.size() + "/" + mHabits.size());
                 double percent = (double) (mHabitsDone.size() * 100 / mHabits.size() * 100);

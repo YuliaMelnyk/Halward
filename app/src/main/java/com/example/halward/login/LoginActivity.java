@@ -211,8 +211,10 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            String userId = mFirebaseAuth.getCurrentUser().getUid();
-                            CollectionReference users = db.collection("users");
+                            //String userId = mFirebaseAuth.getCurrentUser().getUid();
+                            //CollectionReference users = db.collection("users");
+
+                            FirebaseUser user = mFirebaseAuth.getCurrentUser();
 
                             Toast.makeText(LoginActivity.this, "Logged is successfully", Toast.LENGTH_SHORT).show();
                             gotoProfile();

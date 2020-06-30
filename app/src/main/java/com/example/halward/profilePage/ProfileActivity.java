@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.databinding.DataBindingUtil;
@@ -130,15 +131,11 @@ public class ProfileActivity extends AppCompatActivity implements CommonAdapter.
             //set toolbar
             toolbar.inflateMenu(R.menu.menu_profile);
             Menu menu = toolbar.getMenu();
-            toolbar.setNavigationIcon(getResources().getDrawable(R.drawable.back24));
             getSupportActionBar().setDisplayShowTitleEnabled(false);
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(ProfileActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                }
-            });
+
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+
         }
 
 
